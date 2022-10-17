@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = "Products";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model FridgeWithProducts
+
+
+<h2>Products to add into @Model.Fridge.Title</h2>
+<button class="btn btn-outline-primary btn-sm font-weight-bold text-dark mr-4">
+    @Html.ActionLink("Back to Fridge", "GetFridgeById", new { Id = Model.Fridge.Id }, new { @class = "font-weight-bold text-dark" }) 
+</button>
+<table class="table mt-3 text-center w-75">
+    <thead class="thead-light">
+        <tr>
+            <th>
+                Title
+            </th>
+            <th>
+                Default Quantity
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+
+    @foreach (var item in Model.Products)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DefaultQuantity)
+            </td>
+            <td>
+                <button class="btn btn-outline-primary btn-sm font-weight-bold text-dark">
+                    @Html.ActionLink("Select", "SelectedProduct", new { ProductId = item.Id, FridgeId = Model.Fridge.Id }, new { @class = "font-weight-bold text-dark" })
+                </button>
+            <td>
+        </tr>
+    }
+
+</table>

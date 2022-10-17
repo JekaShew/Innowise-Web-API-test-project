@@ -1,0 +1,85 @@
+﻿@{
+    ViewBag.Title = "Fridge Model";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model FridgeProject.Abstract.Data.Product
+<h2>Product</h2>
+
+<button class="btn btn-outline-primary btn-sm font-weight-bold text-dark">
+    @Html.ActionLink("Back to Products", "GetProducts")
+</button>
+<table class="table mt-3 text-center">
+    <thead class="thead-light">
+        <tr>
+            <th>
+                Title
+            </th>
+            <th>
+                Default Quantity
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => Model.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => Model.DefaultQuantity)
+        </td>
+        <td>
+            <button class="btn btn-outline-primary btn-sm ">
+                 @Html.ActionLink("Edit", "UpdateProduct", new { Id = Model.Id }, new { @class = "font-weight-bold text-dark" })
+            </button>   |
+
+            <button class="btn btn-outline-danger btn-sm font-weight-bold text-dark" onclick="ConfirmModal('@Model.Id')">
+                Delete
+            </button>
+        <td>
+    </tr>
+
+
+</table>
+
+<input type="hidden" id="selectedProduct" />
+
+<div class="modal" tabindex="-1" role="dialog" id="deletingProduct">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Deliting Product</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h2>Are you shure ?</h2>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnDeleteProduct" class="btn btn-danger font-weight-bold text-dark" onclick=Delete()>
+                    Yes, Delete
+                </button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick=Back()>Back</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var Back = function () {
+        $('#deletingProduct').modal('hide');
+    };
+
+    var ConfirmModal = function (id) {
+        $('#deletingProduct').modal('show');
+        $('#selectedProduct').val(id);
+    };
+
+    var Delete = function () {
+        let id = $('#selectedProduct').val();
+        window.location.href = ('/Product/Delete?Id=' + id);
+    };
+
+</script>

@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to FridgeProject!</h1>
+    <h3>This is a Web API Application. </h3>
+    <img src="Fridge.png" />
+    <h3>Here You can see a Fridge Project that can add, edit and delete fridges, fridge models and products. </h3>
+    <h3>Just click on some menu item and start! </h3>
+    <div>
+        <h3>You can also update fridges that have product with quantity zero. Just click here -> </h3>
+        <button class="btn btn-outline-primary btn-sm font-weight-bold text-dark">
+            @Html.ActionLink("Update Fridges with Product witout Product Quantity", "UpdateFridgesQuantity","Fridge")
+        </button>
+
+    </div>
+    <h2>You are WELCOME! </h2>
+</div>
