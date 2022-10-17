@@ -1,3 +1,110 @@
+--Creating database
+USE [Fridge]
+GO
+/****** Object:  Table [dbo].[FridgeModels]    Script Date: 10/17/2022 7:57:53 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[FridgeModels](
+	[Id] [uniqueidentifier] NOT NULL,
+	[Title] [nvarchar](max) NOT NULL,
+	[Year] [int] NULL,
+ CONSTRAINT [PK_FridgeModels] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[FridgeProducts]    Script Date: 10/17/2022 7:57:53 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[FridgeProducts](
+	[Id] [uniqueidentifier] NOT NULL,
+	[ProductId] [uniqueidentifier] NOT NULL,
+	[FridgeId] [uniqueidentifier] NOT NULL,
+	[Quantity] [int] NOT NULL,
+ CONSTRAINT [PK_FridgeProducts] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[Fridges]    Script Date: 10/17/2022 7:57:53 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Fridges](
+	[Id] [uniqueidentifier] NOT NULL,
+	[Title] [nvarchar](max) NOT NULL,
+	[OwnerName] [nvarchar](max) NULL,
+	[FridgeModelId] [uniqueidentifier] NOT NULL,
+ CONSTRAINT [PK_Fridges] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[Products]    Script Date: 10/17/2022 7:57:53 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Products](
+	[Id] [uniqueidentifier] NOT NULL,
+	[Title] [nvarchar](max) NOT NULL,
+	[DefaultQuantity] [int] NULL,
+ CONSTRAINT [PK_Products] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[Users]    Script Date: 10/17/2022 7:57:53 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Users](
+	[Id] [uniqueidentifier] NOT NULL,
+	[Login] [nvarchar](max) NOT NULL,
+	[Password] [nvarchar](max) NOT NULL,
+	[Role] [nvarchar](max) NULL,
+ CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+ALTER TABLE [dbo].[FridgeProducts]  WITH CHECK ADD  CONSTRAINT [FK_FridgeProducts_Fridges_FridgeId] FOREIGN KEY([FridgeId])
+REFERENCES [dbo].[Fridges] ([Id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[FridgeProducts] CHECK CONSTRAINT [FK_FridgeProducts_Fridges_FridgeId]
+GO
+ALTER TABLE [dbo].[FridgeProducts]  WITH CHECK ADD  CONSTRAINT [FK_FridgeProducts_Products_ProductId] FOREIGN KEY([ProductId])
+REFERENCES [dbo].[Products] ([Id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[FridgeProducts] CHECK CONSTRAINT [FK_FridgeProducts_Products_ProductId]
+GO
+ALTER TABLE [dbo].[Fridges]  WITH CHECK ADD  CONSTRAINT [FK_Fridges_FridgeModels_FridgeModelId] FOREIGN KEY([FridgeModelId])
+REFERENCES [dbo].[FridgeModels] ([Id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[Fridges] CHECK CONSTRAINT [FK_Fridges_FridgeModels_FridgeModelId]
+GO
+
+
+-- stored procedure
 ALTER PROCEDURE SelectFridgeProductWithoutQuantity
 AS
 BEGIN
@@ -7,7 +114,7 @@ END
 
 USE Fridge
 
-SELECT * FROM Fridges
+SELECT * FROM products
 --TASK 1 —делать выборку продуктов по холодильникам , модель которых начинаетс€ на ј
 
 SELECT Products.Title,Fridges.Title
@@ -48,34 +155,15 @@ WHERE Fridges.Id = (
 )
 
 -- Queries that helps to find the correct answer
-SELECT Fridges.Title, FridgeModels.Title,FridgeModels.Year FROM Fridges INNER JOIN FridgeModels on FridgeModels.Id = Fridges.FridgeModelId
+SELECT Fridges.Title, FridgeModels.Title,FridgeModels.Year 
+FROM Fridges 
+INNER JOIN FridgeModels on FridgeModels.Id = Fridges.FridgeModelId
 WHERE Fridges.Id ='377D489C-CA1D-44CC-AC08-A55FF4417D48'
 
 SELECT FridgeProducts.FridgeId AS [ID], SUM(FridgeProducts.Quantity) AS [SUM]
 FROM FridgeProducts
 GROUP BY FridgeProducts.FridgeId
 ORDER BY [SUM] DESC
-
-
---SELECT FridgeModels.Year
---FROM FridgeModels
---WHERE EXISTS(
---	SELECT Fridges.Id
---	FROM Fridges,
---	(
---		SELECT Fridges.Id as FridgeId, SUM(FridgeProducts.Quantity) as SumFridgeProducts
---		FROM FridgeProducts
---		INNER JOIN Fridges on Fridges.Id = FridgeProducts.FridgeId
---		GROUP BY Fridges.Id
---	) as FridgeProductsSums
---	WHERE 
---		Fridges.FridgeModelId = FridgeModels.Id and Fridges.Id = FridgeProductsSums.FridgeId	
---		and FridgeProductsSums.SumFridgeProducts = (
---			SELECT MAX(FridgeProductsSums.SumFridgeProducts)
---			FROM FridgeProductsSums
---			WHERE Fridges.Id = FridgeProductsSums.FridgeId
---		)												
---)
 
 --TASK 4 ¬ыбрать все продукты и им€ владельца из холодильника, в котором больше всего наименований продуктов. »менно наименований, не количества
 
@@ -98,10 +186,12 @@ WHERE Fridges.Id =
 -- Queries that helps to find the correct answer
 
 SELECT FridgeProducts.FridgeId as [ID], COUNT(*) as [COUNT]
-			FROM FridgeProducts
-			GROUP BY FridgeProducts.FridgeId
+FROM FridgeProducts
+GROUP BY FridgeProducts.FridgeId
 
-SELECT Fridges.Title,Fridges.OwnerName, FridgeModels.Title,FridgeModels.Year FROM Fridges INNER JOIN FridgeModels on FridgeModels.Id = Fridges.FridgeModelId
+SELECT Fridges.Title,Fridges.OwnerName, FridgeModels.Title,FridgeModels.Year 
+FROM Fridges 
+INNER JOIN FridgeModels on FridgeModels.Id = Fridges.FridgeModelId
 WHERE Fridges.Id ='5CF8CD9C-FEAC-43C9-A7C8-1C484CA1757F'
 
 --Ќабор запросов 2
@@ -158,6 +248,7 @@ WHERE FridgeProducts.ProductId in (
 			)
 GROUP BY Fridges.Title
 
+-- Queries that helps to find the correct answer
 SELECT Fridges.Title, COUNT(FridgeProducts.ProductId)
 FROM Fridges
 INNER JOIN FridgeProducts on Fridges.Id = FridgeProducts.FridgeId
