@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace FridgeProject.Web.Client.Controllers
 {
-   
+
     [Route("/Product")]
-    public class ProductController : Controller
+    public class ProductController : BaseController
     {
         private readonly IProduct productService;
 
@@ -30,13 +30,7 @@ namespace FridgeProject.Web.Client.Controllers
             }
             catch (HttpRequestException e)
             {
-                if ((int)e.StatusCode == 404)
-                    return View("~/Views/Errors/NotFound.cshtml");
-                if ((int)e.StatusCode == 401)
-                    return View("~/Views/Errors/Unauthorized.cshtml");
-                if ((int)e.StatusCode == 403)
-                    return View("~/Views/Errors/AccessDenied.cshtml");
-                return View();
+                return CatchHttpRequestExeption(e);
             }
         }
 
@@ -55,13 +49,7 @@ namespace FridgeProject.Web.Client.Controllers
             }
             catch (HttpRequestException e)
             {
-                if ((int)e.StatusCode == 404)
-                    return View("~/Views/Errors/NotFound.cshtml");
-                if ((int)e.StatusCode == 401)
-                    return View("~/Views/Errors/Unauthorized.cshtml");
-                if ((int)e.StatusCode == 403)
-                    return View("~/Views/Errors/AccessDenied.cshtml");
-                return View();
+                return CatchHttpRequestExeption(e);
             }
 
         }
@@ -75,26 +63,22 @@ namespace FridgeProject.Web.Client.Controllers
         [HttpPost("Add")]
         public async Task<IActionResult> AddProduct(Product product)
         {
-            if (ModelState.IsValid)
+            try
             {
-                try
+                if (ModelState.IsValid)
                 {
+
                     await productService.AddProduct(product);
                     return RedirectToAction(nameof(GetProducts));
                 }
-                catch (HttpRequestException e)
-                {
-                    if ((int)e.StatusCode == 404)
-                        return View("~/Views/Errors/NotFound.cshtml");
-                    if ((int)e.StatusCode == 401)
-                        return View("~/Views/Errors/Unauthorized.cshtml");
-                    if ((int)e.StatusCode == 403)
-                        return View("~/Views/Errors/AccessDenied.cshtml");
-                    return View();
-                }
+                else
+                    return View(product);
             }
-            else
-                return View(product);
+            catch (HttpRequestException e)
+            {
+                return CatchHttpRequestExeption(e);
+            }
+            
         }
 
 
@@ -114,13 +98,7 @@ namespace FridgeProject.Web.Client.Controllers
             }
             catch (HttpRequestException e)
             {
-                if ((int)e.StatusCode == 404)
-                    return View("~/Views/Errors/NotFound.cshtml");
-                if ((int)e.StatusCode == 401)
-                    return View("~/Views/Errors/Unauthorized.cshtml");
-                if ((int)e.StatusCode == 403)
-                    return View("~/Views/Errors/AccessDenied.cshtml");
-                return View();
+                return CatchHttpRequestExeption(e);
             }
         }
 
@@ -132,26 +110,20 @@ namespace FridgeProject.Web.Client.Controllers
         [HttpPost("Update")]
         public async Task<ActionResult> UpdateProduct(Product product)
         {
-            if (ModelState.IsValid)
+            try
             {
-                try
+                if (ModelState.IsValid)
                 {
                     await productService.UpdateProduct(product);
                     return RedirectToAction(nameof(GetProducts));
                 }
-                catch (HttpRequestException e)
-                {
-                    if ((int)e.StatusCode == 404)
-                        return View("~/Views/Errors/NotFound.cshtml");
-                    if ((int)e.StatusCode == 401)
-                        return View("~/Views/Errors/Unauthorized.cshtml");
-                    if ((int)e.StatusCode == 403)
-                        return View("~/Views/Errors/AccessDenied.cshtml");
-                    return View();
-                }
+                else
+                    return View(product);
             }
-            else
-                return View(product);
+            catch (HttpRequestException e)
+            {
+                return CatchHttpRequestExeption(e);
+            }
         }
     }
 }

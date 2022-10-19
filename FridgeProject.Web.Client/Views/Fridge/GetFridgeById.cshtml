@@ -39,68 +39,74 @@
             @Html.DisplayFor(modelItem => Model.FridgeModel.Title)
         </td>
         <td>
-            <button class="btn btn-outline-primary btn-sm text-left mb-2 ">
-                @Html.ActionLink("Add Product", "SelectProducts", new { FridgeId = Model.Id, }, new { @class = "font-weight-bold text-dark" })
-            </button>
-            <table class="table text-center mt-0">
-                <thead class="thead-light ">
-                    <tr>
-                        <th>
-                            Product
-                        </th>
-                        <th>
-                            Quantity
-                        </th>
-                        <th>
-                            Action
-                        </th>
-                    </tr>
-                </thead>
-                @foreach (var fridgeProduct in Model.FridgeProducts)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => fridgeProduct.Product.Title)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => fridgeProduct.Quantity)
-                        </td>
-                        <td>  
-                            <button class="btn btn-outline-danger btn-sm font-weight-bold text-dark" onclick="ConfirmModalP('@fridgeProduct.Product.Id')">
-                                Delete
-                            </button>
-                        <td>
-                    </tr>
+            <div class="form-group row" >
+                <button class="btn btn-outline-primary btn-sm text-left mb-2 mr-2 ">
+                    @Html.ActionLink("Put Product", "SelectProducts", new { FridgeId = Model.Id, }, new { @class = "font-weight-bold text-dark" })
+                </button>
+                <button class="btn btn-outline-primary btn-sm text-left mb-2 ml-2">
+                    @Html.ActionLink("Take Product", "SelectExistedProducts", new { FridgeId = Model.Id, }, new { @class = "font-weight-bold text-dark" })
+                </button>
+            </div>
 
-                }
-            </table>
-            <input type="hidden" id="selectedFridgeProduct" />
+                <table class="table text-center mt-0">
+                    <thead class="thead-light ">
+                        <tr>
+                            <th>
+                                Product
+                            </th>
+                            <th>
+                                Quantity
+                            </th>
+                            <th>
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    @foreach (var fridgeProduct in Model.FridgeProducts)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => fridgeProduct.Product.Title)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => fridgeProduct.Quantity)
+                            </td>
+                            <td>
+                                <button class="btn btn-outline-danger btn-sm font-weight-bold text-dark" onclick="ConfirmModalP('@fridgeProduct.Product.Id')">
+                                    Delete
+                                </button>
+                            <td>
+                        </tr>
 
-            <div class="modal" tabindex="-1" role="dialog" id="deletingFridgeProduct">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Deliting Fridge Product</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
+                    }
+                </table>
+                <input type="hidden" id="selectedFridgeProduct" />
 
-                            <h3>Are you shure?</h3>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" id="btnDeleteFridgeProduct" class="btn btn-danger font-weight-bold text-dark" onclick=DeleteP()>
-                                Yes, Delete
-                            </button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick=BackP()>Back</button>
+                <div class="modal" tabindex="-1" role="dialog" id="deletingFridgeProduct">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Deliting Fridge Product</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+                                <h3>Are you shure?</h3>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" id="btnDeleteFridgeProduct" class="btn btn-danger font-weight-bold text-dark" onclick=DeleteP()>
+                                    Yes, Delete
+                                </button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick=BackP()>Back</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
 
-        </td>
+</td>
         <td>
             <button class="btn btn-outline-primary btn-sm ">
                 @Html.ActionLink("Update", "UpdateFridge", new { Id = Model.Id }, new { @class = "font-weight-bold text-dark" })

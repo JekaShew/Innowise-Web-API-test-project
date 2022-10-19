@@ -1,13 +1,13 @@
 ﻿@{
-    ViewBag.Title = "Products";
+    ViewBag.Title = "ExistedProducts";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@model FridgeWithProducts
+@model FridgeWithExistedProducts
 
 
-<h2>Products to put into @Model.Fridge.Title</h2>
+<h2>Products to Take from @Model.Fridge.Title</h2>
 <button class="btn btn-outline-primary btn-sm font-weight-bold text-dark mr-4">
-    @Html.ActionLink("Back to Fridge", "GetFridgeById", new { Id = Model.Fridge.Id }, new { @class = "font-weight-bold text-dark" }) 
+    @Html.ActionLink("Back to Fridge", "GetFridgeById", new { Id = Model.Fridge.Id }, new { @class = "font-weight-bold text-dark" })
 </button>
 <table class="table mt-3 text-center w-75">
     <thead class="thead-light">
@@ -16,7 +16,7 @@
                 Title
             </th>
             <th>
-                Default Quantity
+                Quantity
             </th>
             <th>
                 Action
@@ -24,18 +24,18 @@
         </tr>
     </thead>
 
-    @foreach (var item in Model.Products)
+    @foreach (var item in Model.ExistedProducts)
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Title)
+                @Html.DisplayFor(modelItem => item.Product.Title)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DefaultQuantity)
+                @Html.DisplayFor(modelItem => item.Quantity)
             </td>
             <td>
                 <button class="btn btn-outline-primary btn-sm font-weight-bold text-dark">
-                    @Html.ActionLink("Select", "SelectedProduct", new { ProductId = item.Id, FridgeId = Model.Fridge.Id }, new { @class = "font-weight-bold text-dark" })
+                    @Html.ActionLink("Select", "SelectedExistedProduct", new { FridgeProductId = item.Id, FridgeId = Model.Fridge.Id }, new { @class = "font-weight-bold text-dark" })
                 </button>
             <td>
         </tr>

@@ -11,7 +11,7 @@ using FridgeProject.Abstract;
 namespace FridgeProject.Web.Client.Controllers
 {
     [Route("/FridgeModel")]
-    public class FridgeModelController : Controller
+    public class FridgeModelController : BaseController
     {
         private readonly IFridgeModel fridgeModelService;
 
@@ -30,15 +30,7 @@ namespace FridgeProject.Web.Client.Controllers
             }
             catch (HttpRequestException e)
             {
-                if ((int)e.StatusCode == 404)
-                    return View("~/Views/Errors/NotFound.cshtml");
-                if ((int)e.StatusCode == 401)
-                    return View("~/Views/Errors/Unauthorized.cshtml");
-                if ((int)e.StatusCode == 403)
-                    return View("~/Views/Errors/AccessDenied.cshtml");
-                //if (HttpContext.Response.StatusCode == 200)
-                return View();
-
+                return CatchHttpRequestExeption(e);
             }
         }
 
@@ -57,16 +49,8 @@ namespace FridgeProject.Web.Client.Controllers
             }
             catch (HttpRequestException e)
             {
-                if ((int)e.StatusCode == 404)
-                    return View("~/Views/Errors/NotFound.cshtml");
-                if ((int)e.StatusCode == 401)
-                    return View("~/Views/Errors/Unauthorized.cshtml");
-                if ((int)e.StatusCode == 403)
-                    return View("~/Views/Errors/AccessDenied.cshtml");
-                return View();
+                return CatchHttpRequestExeption(e);
             }
-
-
         }
 
         [HttpGet("Add")]
@@ -78,28 +62,23 @@ namespace FridgeProject.Web.Client.Controllers
         [HttpPost("Add")]
         public async Task<IActionResult> AddFridgeModel(FridgeModel fridgeModel)
         {
-            if (ModelState.IsValid)
+            try
             {
-                try
+                if (ModelState.IsValid)
                 {
-                    await fridgeModelService.AddFridgeModel(fridgeModel);
-                    return RedirectToAction(nameof(GetFridgeModels));
-                }
-                catch (HttpRequestException e)
-                {
-                    if ((int)e.StatusCode == 404)
-                        return View("~/Views/Errors/NotFound.cshtml");
-                    if ((int)e.StatusCode == 401)
-                        return View("~/Views/Errors/Unauthorized.cshtml");
-                    if ((int)e.StatusCode == 403)
-                        return View("~/Views/Errors/AccessDenied.cshtml");
-                    return View();
-                }
+                
+                        await fridgeModelService.AddFridgeModel(fridgeModel);
+                        return RedirectToAction(nameof(GetFridgeModels));
+                } 
+                else
+                    return View(fridgeModel);
+                
             }
-            else
-                return View(fridgeModel);
+            catch (HttpRequestException e)
+            {
+                return CatchHttpRequestExeption(e);
+            } 
         }
-
 
         [HttpGet("Delete")]
         public async Task<ActionResult> DeleteFridgeModel(Guid id)
@@ -117,13 +96,7 @@ namespace FridgeProject.Web.Client.Controllers
             }
             catch (HttpRequestException e)
             {
-                if ((int)e.StatusCode == 404)
-                    return View("~/Views/Errors/NotFound.cshtml");
-                if ((int)e.StatusCode == 401)
-                    return View("~/Views/Errors/Unauthorized.cshtml");
-                if ((int)e.StatusCode == 403)
-                    return View("~/Views/Errors/AccessDenied.cshtml");
-                return View();
+                return CatchHttpRequestExeption(e);
             }
         }
 
@@ -136,40 +109,29 @@ namespace FridgeProject.Web.Client.Controllers
             }
             catch (HttpRequestException e)
             {
-                if ((int)e.StatusCode == 404)
-                    return View("~/Views/Errors/NotFound.cshtml");
-                if ((int)e.StatusCode == 401)
-                    return View("~/Views/Errors/Unauthorized.cshtml");
-                if ((int)e.StatusCode == 403)
-                    return View("~/Views/Errors/AccessDenied.cshtml");
-                return View();
+                return CatchHttpRequestExeption(e);
             }
         }
+
         [HttpPost("Update")]
         public async Task<ActionResult> UpdateFridgeModel(FridgeModel fridgeModel)
-        {
+        {try
+                {
             if (ModelState.IsValid)
             {
-                try
-                {
-
+                
                     await fridgeModelService.UpdateFridgeModel(fridgeModel);
                     return RedirectToAction(nameof(GetFridgeModels));
-                }
-                catch (HttpRequestException e)
-                {
-                    if ((int)e.StatusCode == 404)
-                        return View("~/Views/Errors/NotFound.cshtml");
-                    if ((int)e.StatusCode == 401)
-                        return View("~/Views/Errors/Unauthorized.cshtml");
-                    if ((int)e.StatusCode == 403)
-                        return View("~/Views/Errors/AccessDenied.cshtml");
-                    //if (HttpContext.Response.StatusCode == 200)
-                    return View();
-                }
+               
+                
             }
             else
                 return View(fridgeModel);
+            }
+            catch (HttpRequestException e)
+                {
+                    return CatchHttpRequestExeption(e);
+                }
         }
     }
 }

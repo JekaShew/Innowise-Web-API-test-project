@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace FridgeProject.Web.Client.Controllers
 {
     [Route("/Fridge")]
-    public class FridgeController : Controller
+    public class FridgeController : BaseController
     {
         private readonly IFridge fridgeServices;
         private readonly IProduct productServices;
@@ -35,13 +35,7 @@ namespace FridgeProject.Web.Client.Controllers
             }
             catch (HttpRequestException e)
             {
-                if ((int)e.StatusCode == 404)
-                    return View("~/Views/Errors/NotFound.cshtml");
-                if ((int)e.StatusCode == 401)
-                    return View("~/Views/Errors/Unauthorized.cshtml");
-                if ((int)e.StatusCode == 403)
-                    return View("~/Views/Errors/AccessDenied.cshtml");
-                return View();
+                return CatchHttpRequestExeption(e);
             }
         }
 
@@ -60,31 +54,19 @@ namespace FridgeProject.Web.Client.Controllers
             }
             catch (HttpRequestException e)
             {
-                if ((int)e.StatusCode == 404)
-                    return View("~/Views/Errors/NotFound.cshtml");
-                if ((int)e.StatusCode == 401)
-                    return View("~/Views/Errors/Unauthorized.cshtml");
-                if ((int)e.StatusCode == 403)
-                    return View("~/Views/Errors/AccessDenied.cshtml");
-                return View();
+                return CatchHttpRequestExeption(e);
             }
         }
        
         [HttpGet("Add")]
         public async Task<ActionResult> AddFridge()
         {
-            var FridgeWithFridgeModels = new FridgeWithFridgeModels
+            var fridgeWithFridgeModels = new FridgeWithFridgeModels
             {
                 Fridge = new Fridge(),
                 FridgeModels = await fridgeModelServices.GetFridgeModels(),
             };
-            if (HttpContext.Response.StatusCode == 404)
-                return View("NotFound");
-            if (HttpContext.Response.StatusCode == 401)
-                return View("Unauthorized");
-            if (HttpContext.Response.StatusCode == 403)
-                return View("AccessDenied");
-            return View(FridgeWithFridgeModels); 
+            return View(fridgeWithFridgeModels);
         }
 
         [HttpPost("Add")]
@@ -107,13 +89,7 @@ namespace FridgeProject.Web.Client.Controllers
             }
             catch (HttpRequestException e)
             {
-                if ((int)e.StatusCode == 404)
-                    return View("~/Views/Errors/NotFound.cshtml");
-                if ((int)e.StatusCode == 401)
-                    return View("~/Views/Errors/Unauthorized.cshtml");
-                if ((int)e.StatusCode == 403)
-                    return View("~/Views/Errors/AccessDenied.cshtml");
-                return View();
+                return CatchHttpRequestExeption(e);
             }
         }
 
@@ -133,13 +109,7 @@ namespace FridgeProject.Web.Client.Controllers
             }
             catch (HttpRequestException e)
             {
-                if ((int)e.StatusCode == 404)
-                    return View("~/Views/Errors/NotFound.cshtml");
-                if ((int)e.StatusCode == 401)
-                    return View("~/Views/Errors/Unauthorized.cshtml");
-                if ((int)e.StatusCode == 403)
-                    return View("~/Views/Errors/AccessDenied.cshtml");
-                return View();
+                return CatchHttpRequestExeption(e);
             }
         }
 
@@ -156,32 +126,25 @@ namespace FridgeProject.Web.Client.Controllers
         [HttpPost("Update")]
         public async Task<ActionResult> UpdateFridge(FridgeWithFridgeModels fridgeWithFridgeModels)
         {
-            
-            var fridge = fridgeWithFridgeModels.Fridge;
-            if (ModelState.IsValid)
-            {
-                try
+           try
+            { 
+                var fridge = fridgeWithFridgeModels.Fridge;
+                if (ModelState.IsValid)
                 {
-                    fridge.FridgeProducts = (await fridgeServices.GetFridgeById(fridge.Id)).FridgeProducts;
-                    fridge.FridgeModel = await fridgeModelServices.GetFridgeModelById(fridgeWithFridgeModels.FridgeModelId);
-                    await fridgeServices.UpdateFridge(fridge);
-                    return RedirectToAction(nameof(GetFridges));
+                
+                        fridge.FridgeProducts = (await fridgeServices.GetFridgeById(fridge.Id)).FridgeProducts;
+                        fridge.FridgeModel = await fridgeModelServices.GetFridgeModelById(fridgeWithFridgeModels.FridgeModelId);
+                        await fridgeServices.UpdateFridge(fridge);
+                        return RedirectToAction(nameof(GetFridges));
+                
                 }
-                catch (HttpRequestException e)
-                {
-                    if ((int)e.StatusCode == 404)
-                        return View("~/Views/Errors/NotFound.cshtml");
-                    if ((int)e.StatusCode == 401)
-                        return View("~/Views/Errors/Unauthorized.cshtml");
-                    if ((int)e.StatusCode == 403)
-                        return View("~/Views/Errors/AccessDenied.cshtml");
-                    return View();
-                }
-
-            }
-            else
-                fridgeWithFridgeModels.FridgeModels = await fridgeModelServices.GetFridgeModels();
-                return View(fridgeWithFridgeModels);
+                else
+                    fridgeWithFridgeModels.FridgeModels = await fridgeModelServices.GetFridgeModels();
+                    return View(fridgeWithFridgeModels);}
+           catch (HttpRequestException e)
+           {
+               return CatchHttpRequestExeption(e);
+           }
         }
 
         [HttpGet("UpdateFridgesQuantity")]
@@ -200,15 +163,8 @@ namespace FridgeProject.Web.Client.Controllers
             }
             catch (HttpRequestException e)
             {
-                if ((int)e.StatusCode == 404)
-                    return View("~/Views/Errors/NotFound.cshtml");
-                if ((int)e.StatusCode == 401)
-                    return View("~/Views/Errors/Unauthorized.cshtml");
-                if ((int)e.StatusCode == 403)
-                    return View("~/Views/Errors/AccessDenied.cshtml");
-                return View();
-            }
-           
+                return CatchHttpRequestExeption(e);
+            }     
         }
 
         [HttpGet("SelectProducts")]
@@ -226,15 +182,26 @@ namespace FridgeProject.Web.Client.Controllers
             }
             catch (HttpRequestException e)
             {
-                if ((int)e.StatusCode == 404)
-                    return View("~/Views/Errors/NotFound.cshtml");
-                if ((int)e.StatusCode == 401)
-                    return View("~/Views/Errors/Unauthorized.cshtml");
-                if ((int)e.StatusCode == 403)
-                    return View("~/Views/Errors/AccessDenied.cshtml");
-                return View();
+                return CatchHttpRequestExeption(e);
             }
-
+        }
+        [HttpGet("SelectExistedProducts")]
+        public async Task<IActionResult> SelectExistedProducts(Guid fridgeId)
+        {
+            try
+            {
+                var existedProducts = (await fridgeServices.GetFridgeById(fridgeId)).FridgeProducts.ToList();
+                var fridgeWithExistedProducts = new FridgeWithExistedProducts
+                {
+                    Fridge = await fridgeServices.GetFridgeById(fridgeId),
+                    ExistedProducts = existedProducts
+                };
+                return View(fridgeWithExistedProducts);
+            }
+            catch (HttpRequestException e)
+            {
+                return CatchHttpRequestExeption(e);
+            }
         }
 
         [HttpGet("SelectedProduct")]
@@ -254,64 +221,100 @@ namespace FridgeProject.Web.Client.Controllers
             }
             catch (HttpRequestException e)
             {
-                if ((int)e.StatusCode == 404)
-                    return View("~/Views/Errors/NotFound.cshtml");
-                if ((int)e.StatusCode == 401)
-                    return View("~/Views/Errors/Unauthorized.cshtml");
-                if ((int)e.StatusCode == 403)
-                    return View("~/Views/Errors/AccessDenied.cshtml");
-                return View();
+                return CatchHttpRequestExeption(e);
             }
+        }
 
+        [HttpGet("SelectedExistedProduct")]
+        public async Task<IActionResult> SelectedExistedProduct(Guid fridgeProductId,Guid fridgeId)
+        {
+            try
+            {
+                var fridgeProduct = (await fridgeServices.GetFridgeById(fridgeId)).FridgeProducts.FirstOrDefault(fp => fp.Id == fridgeProductId);
+
+                return View(fridgeProduct);
+            }
+            catch (HttpRequestException e)
+            {
+                return CatchHttpRequestExeption(e);
+            }
         }
 
         [HttpPost("SelectedProduct")]
-        public async Task<IActionResult> SelectedProduct(SelectedProduct selectedProductToAdd)
+        public async Task<IActionResult> SelectedProduct(SelectedProduct selectedProductToPut)
         {
-            
-            var fridge = await fridgeServices.GetFridgeById(selectedProductToAdd.FridgeId);
-            var selectedProduct = await productServices.GetProductById(selectedProductToAdd.ProductId);
-            var existingFridgeProduct = fridge.FridgeProducts.FirstOrDefault(fp => fp.Product.Equals(selectedProduct));
+            try
+            {
+                var fridge = await fridgeServices.GetFridgeById(selectedProductToPut.FridgeId);
+                var selectedProduct = await productServices.GetProductById(selectedProductToPut.ProductId);
+                var existingFridgeProduct = fridge.FridgeProducts.FirstOrDefault(fp => fp.Product.Equals(selectedProduct));
 
-            var selectedFridgeProduct = new FridgeProduct
-            {
-                Fridge = await fridgeServices.GetFridgeById(selectedProductToAdd.FridgeId),
-                Product = selectedProduct,
-                Quantity = selectedProductToAdd.Quantity
-            };
-            if (ModelState.IsValid)
-            {
-                try
+                var selectedFridgeProduct = new FridgeProduct
                 {
-                    if (existingFridgeProduct != null)
-                    {
-                        existingFridgeProduct.Quantity += selectedProductToAdd.Quantity;
+                    Fridge = await fridgeServices.GetFridgeById(selectedProductToPut.FridgeId),
+                    Product = selectedProduct,
+                    Quantity = selectedProductToPut.Quantity
+                };
+                if (ModelState.IsValid)
+                {
+                        if (existingFridgeProduct != null)
+                        {
+                            existingFridgeProduct.Quantity += selectedProductToPut.Quantity;
 
+                        }
+                        else
+                            fridge.FridgeProducts.Add(new FridgeProduct
+                            {
+                                Fridge = fridge,
+                                Product = selectedProduct,
+                                Quantity = selectedProductToPut.Quantity
+                            });
+
+                        await fridgeServices.UpdateFridge(fridge);
+                        return Redirect($"/Fridge/SelectProducts?FridgeId={selectedProductToPut.FridgeId}");
+                }
+                else return View(selectedFridgeProduct);
+            }
+            catch (HttpRequestException e)
+            {
+                return CatchHttpRequestExeption(e);
+            }
+        }
+
+        [HttpPost("SelectedExistedProduct")]
+        public async Task<IActionResult> SelectedExistedProduct(SelectedFridgeProduct selectedFridgeProductToTake)
+        {
+            try
+            {
+                var fridge = await fridgeServices.GetFridgeById(selectedFridgeProductToTake.FridgeId);
+                var selecteFridgeProduct = fridge
+                    .FridgeProducts.FirstOrDefault(fp => fp.Id == selectedFridgeProductToTake.FridgeProductId);
+
+                if (ModelState.IsValid)
+                {
+                    if (selectedFridgeProductToTake.Quantity <= selecteFridgeProduct.Quantity)
+                    {
+                        ViewBag.QuantityError = "";
+                        fridge.FridgeProducts.FirstOrDefault(fp =>
+                            fp.Id == selecteFridgeProduct.Id)
+                            .Quantity = selecteFridgeProduct.Quantity - selectedFridgeProductToTake.Quantity;
+
+                        await fridgeServices.UpdateFridge(fridge);
+                        return Redirect($"/Fridge/GetFridgeById?Id={selectedFridgeProductToTake.FridgeId}");
                     }
                     else
-                        fridge.FridgeProducts.Add(new FridgeProduct
-                        {
-                            Id = Guid.NewGuid(),
-                            Fridge = fridge,
-                            Product = selectedProduct,
-                            Quantity = selectedProductToAdd.Quantity
-                        });
-
-                    await fridgeServices.UpdateFridge(fridge);
-                    return Redirect($"/Fridge/SelectProducts?FridgeId={selectedProductToAdd.FridgeId}");
+                    {
+                        ViewBag.QuantityError = "You can't Take more than exists!";
+                        return View(selecteFridgeProduct);
+                    }
                 }
-                catch (HttpRequestException e)
-                {
-                    if ((int)e.StatusCode == 404)
-                        return View("~/Views/Errors/NotFound.cshtml");
-                    if ((int)e.StatusCode == 401)
-                        return View("~/Views/Errors/Unauthorized.cshtml");
-                    if ((int)e.StatusCode == 403)
-                        return View("~/Views/Errors/AccessDenied.cshtml");
-                    return View();
-                }
+                else return View(selecteFridgeProduct);
             }
-            else return View(selectedFridgeProduct);
+            catch (HttpRequestException e)
+            {
+                return CatchHttpRequestExeption(e);
+            }
+            
         }
 
         [HttpGet("DeleteProduct")]
@@ -327,15 +330,8 @@ namespace FridgeProject.Web.Client.Controllers
             }
             catch (HttpRequestException e)
             {
-                if ((int)e.StatusCode == 404)
-                    return View("~/Views/Errors/NotFound.cshtml");
-                if ((int)e.StatusCode == 401)
-                    return View("~/Views/Errors/Unauthorized.cshtml");
-                if ((int)e.StatusCode == 403)
-                    return View("~/Views/Errors/AccessDenied.cshtml");
-                return View();
+                return CatchHttpRequestExeption(e);
             }
         }
-
     }
 }

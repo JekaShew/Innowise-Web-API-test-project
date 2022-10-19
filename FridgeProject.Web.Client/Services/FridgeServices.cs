@@ -12,80 +12,57 @@ using System.Threading.Tasks;
 
 namespace FridgeProject.Web.Client.Services
 {
-    public class FridgeServices : IFridge
+    public class FridgeServices : BaseClientService,IFridge, IDisposable
     {
-        private readonly HttpClient httpClient;
-        private readonly RemoteConfig remoteConfig;
-        private readonly IHttpContextAccessor httpContextAccessor;
-
-        public FridgeServices(IOptions<RemoteConfig> options, IHttpContextAccessor httpContextAccessor)
+        
+        public FridgeServices(IOptions<RemoteConfig> options, IHttpContextAccessor httpContextAccessor) : base(options,httpContextAccessor)
         {
-            httpClient = new HttpClient();
-            remoteConfig = options.Value;
-            this.httpContextAccessor = httpContextAccessor;
+            
         }
         public async Task AddFridge(Fridge fridge)
-        {          
-            var request = new HttpRequestMessage(HttpMethod.Post, $"{remoteConfig.BaseUrl}/api/fridges/addfridge");
-            request.Content = new StringContent(JsonConvert.SerializeObject(fridge, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }), System.Text.Encoding.UTF8, "application/json");
-            request.Headers.Add("Authorization", $"Bearer {httpContextAccessor.HttpContext.Request.Cookies["AUTHORIZATION_BEARER"]}");
-            var response = await httpClient.SendAsync(request);
+        {
+            var response = await SendRequest(HttpMethod.Post, "fridges", "addfridge", SerializeInJson(fridge));
             response.EnsureSuccessStatusCode();
         }
 
         public async Task DeleteFridge(Fridge fridge)
         {
-            var request = new HttpRequestMessage(HttpMethod.Delete, $"{remoteConfig.BaseUrl}/api/fridges/deletefridge");
-            request.Content = new StringContent(JsonConvert.SerializeObject(fridge, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }), System.Text.Encoding.UTF8, "application/json");
-            request.Headers.Add("AUTHORIZATION", $"Bearer {httpContextAccessor.HttpContext.Request.Cookies["AUTHORIZATION_BEARER"]}");
-            var response = await httpClient.SendAsync(request);
+            var response = await SendRequest(HttpMethod.Delete, "fridges", "deletefridge", SerializeInJson(fridge));
             response.EnsureSuccessStatusCode();
         }
 
         public async Task<Fridge> GetFridgeById(Guid id)
         {
-            
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{remoteConfig.BaseUrl}/api/fridges/getfridgebyid/{id}");
-            request.Headers.Add("AUTHORIZATION", $"Bearer {httpContextAccessor.HttpContext.Request.Cookies["AUTHORIZATION_BEARER"]}");
-            var response = await httpClient.SendAsync(request);
+            var response = await SendRequest(HttpMethod.Get, "fridges", $"getfridgebyid/{id}", null);
             response.EnsureSuccessStatusCode();
-            return JsonConvert.DeserializeObject<Fridge>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });  
+            return await DeSerializeJson<Fridge>(response);
         }
 
         public async Task<List<Fridge>> GetFridges()
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{remoteConfig.BaseUrl}/api/fridges/getfridges");
-            request.Headers.Add("Authorization", $"Bearer {httpContextAccessor.HttpContext.Request.Cookies["AUTHORIZATION_BEARER"]}");
-            var response = await httpClient.SendAsync(request);
+            var response = await SendRequest(HttpMethod.Get, "fridges", "getfridges", null);
             response.EnsureSuccessStatusCode();
-            return JsonConvert.DeserializeObject<List<Fridge>>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+            return await DeSerializeJson<List<Fridge>>(response);
         }
 
         public async Task UpdateFridge(Fridge updatedFridge)
-        {        
-            var request = new HttpRequestMessage(HttpMethod.Put, $"{remoteConfig.BaseUrl}/api/fridges/updatefridge");
-            request.Content = new StringContent(JsonConvert.SerializeObject(updatedFridge), System.Text.Encoding.UTF8, "application/json");
-            request.Headers.Add("AUTHORIZATION", $"Bearer {httpContextAccessor.HttpContext.Request.Cookies["AUTHORIZATION_BEARER"]}");
-            var response = await httpClient.SendAsync(request);
+        {
+            var response = await SendRequest(HttpMethod.Put, "fridges", "updatefridge", SerializeInJson(updatedFridge));
             response.EnsureSuccessStatusCode();
         }     
 
         public async Task UpdateFridgeProductsWithoutQuantity()
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{remoteConfig.BaseUrl}/api/fridges/updatefridgeproductswithoutquantity");
-            request.Headers.Add("AUTHORIZATION", $"Bearer {httpContextAccessor.HttpContext.Request.Cookies["AUTHORIZATION_BEARER"]}");
-            var response = await httpClient.SendAsync(request);
+            var response = await SendRequest(HttpMethod.Post, "fridges", "updatefridgeproductswithoutquantity", null);
             response.EnsureSuccessStatusCode();
         }
 
         public async Task<List<Fridge>> GetUpdatedFridgesWithoutQuantity()
         {
-            var request = new HttpRequestMessage(HttpMethod.Put, $"{remoteConfig.BaseUrl}/api/fridges/getandupdatefridgeswithoutquantity");
-            request.Content = new StringContent("");
-            request.Headers.Add("AUTHORIZATION", $"Bearer {httpContextAccessor.HttpContext.Request.Cookies["AUTHORIZATION_BEARER"]}");
-            var response = await httpClient.SendAsync(request);
+            var response = await SendRequest(HttpMethod.Put, "fridges", "getandupdatefridgeswithoutquantity", new StringContent(""));
             response.EnsureSuccessStatusCode();
-            return JsonConvert.DeserializeObject<List<Fridge>>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+            
+            return await DeSerializeJson<List<Fridge>>(response);
         }
 
         public void Dispose()
