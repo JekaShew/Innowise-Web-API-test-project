@@ -105,7 +105,7 @@ GO
 
 
 -- stored procedure
-ALTER PROCEDURE SelectFridgeProductWithoutQuantity
+CREATE PROCEDURE SelectFridgeProductWithoutQuantity
 AS
 BEGIN
 	SELECT * FROM FridgeProducts

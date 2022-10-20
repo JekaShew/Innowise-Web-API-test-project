@@ -30,13 +30,13 @@ namespace FridgeProject.Tests
 
             await service.AddFridge(new Fridge()
             { 
-                Title="Холодильник с пивом", 
-                OwnerName ="Василий Иванович Федотов", 
+                Title="РҐРѕР»РѕРґРёР»СЊРЅРёРє СЃ РїРёРІРѕРј", 
+                OwnerName ="Р’Р°СЃРёР»РёР№ РРІР°РЅРѕРІРёС‡ Р¤РµРґРѕС‚РѕРІ", 
                 FridgeModel = fridgeModel, 
                 FridgeProducts = new List<FridgeProduct>() 
             });
 
-            Assert.True(dbContext.Fridges.Any(x => x.Title == "Холодильник с пивом" && x.OwnerName == "Василий Иванович Федотов"));
+            Assert.True(dbContext.Fridges.Any(x => x.Title == "РҐРѕР»РѕРґРёР»СЊРЅРёРє СЃ РїРёРІРѕРј" && x.OwnerName == "Р’Р°СЃРёР»РёР№ РРІР°РЅРѕРІРёС‡ Р¤РµРґРѕС‚РѕРІ"));
         }
         
         [Fact]
@@ -58,28 +58,28 @@ namespace FridgeProject.Tests
 
             await service.AddFridge(new Fridge()
             {
-                Title = "Холодильник с пивом",
-                OwnerName = "Василий Иванович Федотов",
+                Title = "РҐРѕР»РѕРґРёР»СЊРЅРёРє СЃ РїРёРІРѕРј",
+                OwnerName = "Р’Р°СЃРёР»РёР№ РРІР°РЅРѕРІРёС‡ Р¤РµРґРѕС‚РѕРІ",
                 FridgeModel = fridgeModel,
                 FridgeProducts = new List<FridgeProduct>()
             });
 
-            Assert.True(dbContext.Fridges.Any(x => x.Title == "Холодильник с пивом" && x.OwnerName == "Василий Иванович Федотов"));
+            Assert.True(dbContext.Fridges.Any(x => x.Title == "РҐРѕР»РѕРґРёР»СЊРЅРёРє СЃ РїРёРІРѕРј" && x.OwnerName == "Р’Р°СЃРёР»РёР№ РРІР°РЅРѕРІРёС‡ Р¤РµРґРѕС‚РѕРІ"));
 
             await service.AddFridge(new Fridge()
             {
-                Title = "Холодильник с водкой",
-                OwnerName = "Иван Иванович Иванов",
+                Title = "РҐРѕР»РѕРґРёР»СЊРЅРёРє СЃ РІРѕРґРєРѕР№",
+                OwnerName = "РРІР°РЅ РРІР°РЅРѕРІРёС‡ РРІР°РЅРѕРІ",
                 FridgeModel = fridgeModel,
                 FridgeProducts = new List<FridgeProduct>()
             });
 
-            Assert.True(dbContext.Fridges.Any(x => x.Title == "Холодильник с водкой" && x.OwnerName == "Иван Иванович Иванов"));
+            Assert.True(dbContext.Fridges.Any(x => x.Title == "РҐРѕР»РѕРґРёР»СЊРЅРёРє СЃ РІРѕРґРєРѕР№" && x.OwnerName == "РРІР°РЅ РРІР°РЅРѕРІРёС‡ РРІР°РЅРѕРІ"));
 
-            var fridge = await service.GetFridgeById(dbContext.Fridges.FirstOrDefault(f => f.Title == "Холодильник с пивом").Id);
+            var fridge = await service.GetFridgeById(dbContext.Fridges.FirstOrDefault(f => f.Title == "РҐРѕР»РѕРґРёР»СЊРЅРёРє СЃ РїРёРІРѕРј").Id);
 
-            Assert.True(fridge.Title == "Холодильник с пивом" 
-                && fridge.OwnerName == "Василий Иванович Федотов"
+            Assert.True(fridge.Title == "РҐРѕР»РѕРґРёР»СЊРЅРёРє СЃ РїРёРІРѕРј" 
+                && fridge.OwnerName == "Р’Р°СЃРёР»РёР№ РРІР°РЅРѕРІРёС‡ Р¤РµРґРѕС‚РѕРІ"
                 && fridge.FridgeModel.Title == fridgeModel.Title);
         }
 
@@ -102,17 +102,17 @@ namespace FridgeProject.Tests
 
             await service.AddFridge(new Fridge()
             {
-                Title = "Холодильник с пивом",
-                OwnerName = "Василий Иванович Федотов",
+                Title = "РҐРѕР»РѕРґРёР»СЊРЅРёРє СЃ РїРёРІРѕРј",
+                OwnerName = "Р’Р°СЃРёР»РёР№ РРІР°РЅРѕРІРёС‡ Р¤РµРґРѕС‚РѕРІ",
                 FridgeModel = fridgeModel,
                 FridgeProducts = new List<FridgeProduct>()
             });
 
-            Assert.True(dbContext.Fridges.Any(x => x.Title == "Холодильник с пивом" && x.OwnerName == "Василий Иванович Федотов"));
+            Assert.True(dbContext.Fridges.Any(x => x.Title == "РҐРѕР»РѕРґРёР»СЊРЅРёРє СЃ РїРёРІРѕРј" && x.OwnerName == "Р’Р°СЃРёР»РёР№ РРІР°РЅРѕРІРёС‡ Р¤РµРґРѕС‚РѕРІ"));
 
             await service.DeleteFridge(await service.GetFridgeById(dbContext.Fridges.First().Id));
 
-            Assert.False(dbContext.Fridges.Any(f => f.Title == "Холодильник с пивом" && f.OwnerName == "Василий Иванович Федотов" && f.FridgeModelId == fridgeModel.Id));
+            Assert.False(dbContext.Fridges.Any(f => f.Title == "РҐРѕР»РѕРґРёР»СЊРЅРёРє СЃ РїРёРІРѕРј" && f.OwnerName == "Р’Р°СЃРёР»РёР№ РРІР°РЅРѕРІРёС‡ Р¤РµРґРѕС‚РѕРІ" && f.FridgeModelId == fridgeModel.Id));
         }  
               
         [Fact]
@@ -141,8 +141,8 @@ namespace FridgeProject.Tests
 
             Assert.True(dbContext.FridgeModels.Any(x => x.Title == "ZELMA-70" && x.Year == 2011));
 
-            await productService.AddProduct(new Product { Title = "Огурец", DefaultQuantity = 3 });
-            await productService.AddProduct(new Product { Title = "Помидор", DefaultQuantity = 2 });
+            await productService.AddProduct(new Product { Title = "РћРіСѓСЂРµС†", DefaultQuantity = 3 });
+            await productService.AddProduct(new Product { Title = "РџРѕРјРёРґРѕСЂ", DefaultQuantity = 2 });
             
 
             var products = await productService.GetProducts();
@@ -150,8 +150,8 @@ namespace FridgeProject.Tests
             var fridgeModel2 = await fridgeModelService.GetFridgeModelById(dbContext.FridgeModels.FirstOrDefault(fm => fm.Title == "ZELMA-70").Id);
             await service.AddFridge(new Fridge()
             {
-                Title = "Холодильник с пивом",
-                OwnerName = "Василий Иванович Федотов",
+                Title = "РҐРѕР»РѕРґРёР»СЊРЅРёРє СЃ РїРёРІРѕРј",
+                OwnerName = "Р’Р°СЃРёР»РёР№ РРІР°РЅРѕРІРёС‡ Р¤РµРґРѕС‚РѕРІ",
                 FridgeModel = fridgeModel1,
                 FridgeProducts = new List<FridgeProduct>
                 {
@@ -171,25 +171,25 @@ namespace FridgeProject.Tests
                 }
             });
 
-            Assert.True(dbContext.Fridges.Any(x => x.Title == "Холодильник с пивом" && x.OwnerName == "Василий Иванович Федотов"));
+            Assert.True(dbContext.Fridges.Any(x => x.Title == "РҐРѕР»РѕРґРёР»СЊРЅРёРє СЃ РїРёРІРѕРј" && x.OwnerName == "Р’Р°СЃРёР»РёР№ РРІР°РЅРѕРІРёС‡ Р¤РµРґРѕС‚РѕРІ"));
 
             await service.UpdateFridge( new Fridge
             {
                 Id = dbContext.Fridges.FirstOrDefault().Id,
-                Title = "Такой себе холодильник",
-                OwnerName = "Петриков Геннадий Викторович",
+                Title = "РўР°РєРѕР№ СЃРµР±Рµ С…РѕР»РѕРґРёР»СЊРЅРёРє",
+                OwnerName = "РџРµС‚СЂРёРєРѕРІ Р“РµРЅРЅР°РґРёР№ Р’РёРєС‚РѕСЂРѕРІРёС‡",
                 FridgeModel = fridgeModel2,
                 FridgeProducts = (await service.GetFridgeById(dbContext.Fridges.FirstOrDefault().Id)).FridgeProducts
             });
 
             Assert.True(
                 dbContext.Fridges.Any(f => 
-                    f.Title == "Такой себе холодильник"
-                    && f.OwnerName == "Петриков Геннадий Викторович"
+                    f.Title == "РўР°РєРѕР№ СЃРµР±Рµ С…РѕР»РѕРґРёР»СЊРЅРёРє"
+                    && f.OwnerName == "РџРµС‚СЂРёРєРѕРІ Р“РµРЅРЅР°РґРёР№ Р’РёРєС‚РѕСЂРѕРІРёС‡"
                     && f.FridgeModelId == fridgeModel2.Id)
                 && !dbContext.Fridges.Any(f => 
-                    f.Title == "Холодильник с пивом"
-                    && f.OwnerName == "Василий Иванович Федотов"
+                    f.Title == "РҐРѕР»РѕРґРёР»СЊРЅРёРє СЃ РїРёРІРѕРј"
+                    && f.OwnerName == "Р’Р°СЃРёР»РёР№ РРІР°РЅРѕРІРёС‡ Р¤РµРґРѕС‚РѕРІ"
                     && f.FridgeModelId == fridgeModel1.Id)
                 );
         }
@@ -222,49 +222,49 @@ namespace FridgeProject.Tests
 
             await service.AddFridge(new Fridge()
             {
-                Title = "Холодильник с пивом",
-                OwnerName = "Василий Иванович Федотов",
+                Title = "РҐРѕР»РѕРґРёР»СЊРЅРёРє СЃ РїРёРІРѕРј",
+                OwnerName = "Р’Р°СЃРёР»РёР№ РРІР°РЅРѕРІРёС‡ Р¤РµРґРѕС‚РѕРІ",
                 FridgeModel = fridgeModel1,
                 FridgeProducts = new List<FridgeProduct>()
             });
 
-            Assert.True(dbContext.Fridges.Any(x => x.Title == "Холодильник с пивом" && x.OwnerName == "Василий Иванович Федотов"));
+            Assert.True(dbContext.Fridges.Any(x => x.Title == "РҐРѕР»РѕРґРёР»СЊРЅРёРє СЃ РїРёРІРѕРј" && x.OwnerName == "Р’Р°СЃРёР»РёР№ РРІР°РЅРѕРІРёС‡ Р¤РµРґРѕС‚РѕРІ"));
 
             await service.AddFridge(new Fridge()
             {
-                Title = "Холодильник с Водкой",
-                OwnerName = "Петр Иванович Каджитов",
+                Title = "РҐРѕР»РѕРґРёР»СЊРЅРёРє СЃ Р’РѕРґРєРѕР№",
+                OwnerName = "РџРµС‚СЂ РРІР°РЅРѕРІРёС‡ РљР°РґР¶РёС‚РѕРІ",
                 FridgeModel = fridgeModel2,
                 FridgeProducts = new List<FridgeProduct>()
             });
 
-            Assert.True(dbContext.Fridges.Any(x => x.Title == "Холодильник с Водкой" && x.OwnerName == "Петр Иванович Каджитов"));
+            Assert.True(dbContext.Fridges.Any(x => x.Title == "РҐРѕР»РѕРґРёР»СЊРЅРёРє СЃ Р’РѕРґРєРѕР№" && x.OwnerName == "РџРµС‚СЂ РРІР°РЅРѕРІРёС‡ РљР°РґР¶РёС‚РѕРІ"));
 
             await service.AddFridge(new Fridge()
             {
-                Title = "Холодильник с Энергетиком",
-                OwnerName = "Иван Федорович Слизерин",
+                Title = "РҐРѕР»РѕРґРёР»СЊРЅРёРє СЃ Р­РЅРµСЂРіРµС‚РёРєРѕРј",
+                OwnerName = "РРІР°РЅ Р¤РµРґРѕСЂРѕРІРёС‡ РЎР»РёР·РµСЂРёРЅ",
                 FridgeModel = fridgeModel1,
                 FridgeProducts = new List<FridgeProduct>()
             });
 
-            Assert.True(dbContext.Fridges.Any(x => x.Title == "Холодильник с Энергетиком" && x.OwnerName == "Иван Федорович Слизерин"));
+            Assert.True(dbContext.Fridges.Any(x => x.Title == "РҐРѕР»РѕРґРёР»СЊРЅРёРє СЃ Р­РЅРµСЂРіРµС‚РёРєРѕРј" && x.OwnerName == "РРІР°РЅ Р¤РµРґРѕСЂРѕРІРёС‡ РЎР»РёР·РµСЂРёРЅ"));
 
             var fridges = await service.GetFridges();
 
             Assert.True(
                 fridges.Count == 3
                 && fridges.Any(f1 => 
-                    f1.Title == "Холодильник с пивом"
-                    && f1.OwnerName == "Василий Иванович Федотов"
+                    f1.Title == "РҐРѕР»РѕРґРёР»СЊРЅРёРє СЃ РїРёРІРѕРј"
+                    && f1.OwnerName == "Р’Р°СЃРёР»РёР№ РРІР°РЅРѕРІРёС‡ Р¤РµРґРѕС‚РѕРІ"
                     && f1.FridgeModel.Title == fridgeModel1.Title)
                 && fridges.Any(f2 =>
-                    f2.Title == "Холодильник с Водкой"
-                    && f2.OwnerName == "Петр Иванович Каджитов"
+                    f2.Title == "РҐРѕР»РѕРґРёР»СЊРЅРёРє СЃ Р’РѕРґРєРѕР№"
+                    && f2.OwnerName == "РџРµС‚СЂ РРІР°РЅРѕРІРёС‡ РљР°РґР¶РёС‚РѕРІ"
                     && f2.FridgeModel.Title == fridgeModel2.Title)
                 && fridges.Any( f3 =>
-                    f3.Title == "Холодильник с Энергетиком"
-                    && f3.OwnerName == "Иван Федорович Слизерин"
+                    f3.Title == "РҐРѕР»РѕРґРёР»СЊРЅРёРє СЃ Р­РЅРµСЂРіРµС‚РёРєРѕРј"
+                    && f3.OwnerName == "РРІР°РЅ Р¤РµРґРѕСЂРѕРІРёС‡ РЎР»РёР·РµСЂРёРЅ"
                     && f3.FridgeModel.Title == fridgeModel1.Title)
                 );
         }
@@ -287,15 +287,15 @@ namespace FridgeProject.Tests
             Assert.True(dbContext.FridgeModels.Any(x => x.Title == "LG-770" && x.Year == 2005));
             var fridgeModel = await fridgeModelService.GetFridgeModelById(dbContext.FridgeModels.First().Id);
 
-            await productService.AddProduct( new Product { Title = "Огурец", DefaultQuantity = 3 });
-            await productService.AddProduct(new Product { Title = "Помидор", DefaultQuantity = 2 });
-            await productService.AddProduct(new Product { Title = "Капуста", DefaultQuantity = 1 });
+            await productService.AddProduct( new Product { Title = "РћРіСѓСЂРµС†", DefaultQuantity = 3 });
+            await productService.AddProduct(new Product { Title = "РџРѕРјРёРґРѕСЂ", DefaultQuantity = 2 });
+            await productService.AddProduct(new Product { Title = "РљР°РїСѓСЃС‚Р°", DefaultQuantity = 1 });
 
             var products = await productService.GetProducts();
             await service.AddFridge(new Fridge()
             {
-                Title = "Холодильник с пивом",
-                OwnerName = "Василий Иванович Федотов",
+                Title = "РҐРѕР»РѕРґРёР»СЊРЅРёРє СЃ РїРёРІРѕРј",
+                OwnerName = "Р’Р°СЃРёР»РёР№ РРІР°РЅРѕРІРёС‡ Р¤РµРґРѕС‚РѕРІ",
                 FridgeModel = fridgeModel,
                 FridgeProducts = new List<FridgeProduct>
                 {
@@ -320,15 +320,15 @@ namespace FridgeProject.Tests
                 }
             });
         
-            Assert.True(dbContext.Fridges.Any(x => x.Title == "Холодильник с пивом" && x.OwnerName == "Василий Иванович Федотов"));
+            Assert.True(dbContext.Fridges.Any(x => x.Title == "РҐРѕР»РѕРґРёР»СЊРЅРёРє СЃ РїРёРІРѕРј" && x.OwnerName == "Р’Р°СЃРёР»РёР№ РРІР°РЅРѕРІРёС‡ Р¤РµРґРѕС‚РѕРІ"));
 
            var updatedFridges = await service.GetUpdatedFridgesWithoutQuantity();
 
             Assert.True(
                 updatedFridges.Count == 1
                 && updatedFridges.Any(uf =>
-                    uf.Title == "Холодильник с пивом"
-                    && uf.OwnerName == "Василий Иванович Федотов"
+                    uf.Title == "РҐРѕР»РѕРґРёР»СЊРЅРёРє СЃ РїРёРІРѕРј"
+                    && uf.OwnerName == "Р’Р°СЃРёР»РёР№ РРІР°РЅРѕРІРёС‡ Р¤РµРґРѕС‚РѕРІ"
                     && uf.FridgeModel.Title == fridgeModel.Title
                     && !uf.FridgeProducts.Any(fp => fp.Quantity == 0)
                 ));

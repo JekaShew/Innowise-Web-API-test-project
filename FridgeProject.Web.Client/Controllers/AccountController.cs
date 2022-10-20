@@ -1,4 +1,4 @@
-﻿using FridgeProject.Abstract;
+using FridgeProject.Abstract;
 using FridgeProject.Abstract.Data;
 using Microsoft.AspNetCore.Mvc;
 using System;

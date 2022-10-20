@@ -1,4 +1,4 @@
-﻿using FridgeProject.Abstract;
+using FridgeProject.Abstract;
 using FridgeProject.Abstract.Data;
 using FridgeProject.Data;
 using Microsoft.AspNetCore.Authentication;

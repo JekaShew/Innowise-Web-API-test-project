@@ -1,4 +1,4 @@
-﻿using FridgeProject.Data;
+using FridgeProject.Data;
 using FridgeProject.Abstract.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
