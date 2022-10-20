@@ -115,18 +115,18 @@ END
 USE Fridge
 
 SELECT * FROM products
---TASK 1 Сделать выборку продуктов по холодильникам , модель которых начинается на А
+--TASK 1 РЎРґРµР»Р°С‚СЊ РІС‹Р±РѕСЂРєСѓ РїСЂРѕРґСѓРєС‚РѕРІ РїРѕ С…РѕР»РѕРґРёР»СЊРЅРёРєР°Рј , РјРѕРґРµР»СЊ РєРѕС‚РѕСЂС‹С… РЅР°С‡РёРЅР°РµС‚СЃСЏ РЅР° Рђ
 
 SELECT Products.Title,Fridges.Title
 FROM Fridges
 INNER JOIN FridgeModels on Fridges.FridgeModelId = FridgeModels.Id
 INNER JOIN FridgeProducts on Fridges.Id = FridgeProducts.FridgeId
 INNER JOIN Products on Products.Id = FridgeProducts.ProductId
-WHERE FridgeModels.Title LIKE 'А%'
+WHERE FridgeModels.Title LIKE 'Рђ%'
 GROUP BY Fridges.Title, Products.Title
 
 
---TASK 2 Сделать выборку холодильников, в которых есть продукты в количестве, меньше чем количество по умолчанию
+--TASK 2 РЎРґРµР»Р°С‚СЊ РІС‹Р±РѕСЂРєСѓ С…РѕР»РѕРґРёР»СЊРЅРёРєРѕРІ, РІ РєРѕС‚РѕСЂС‹С… РµСЃС‚СЊ РїСЂРѕРґСѓРєС‚С‹ РІ РєРѕР»РёС‡РµСЃС‚РІРµ, РјРµРЅСЊС€Рµ С‡РµРј РєРѕР»РёС‡РµСЃС‚РІРѕ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
 
 SELECT Fridges.Title,Fridges.OwnerName 
 FROM Fridges
@@ -137,7 +137,7 @@ WHERE EXISTS(
 				WHERE FridgeProducts.Quantity < Products.DefaultQuantity and FridgeProducts.FridgeId = Fridges.Id
 			)
 
---TASK 3 В каком году выпустили холодильник с наибольшей вместимостью(сумма всех продуктов больше всего)
+--TASK 3 Р’ РєР°РєРѕРј РіРѕРґСѓ РІС‹РїСѓСЃС‚РёР»Рё С…РѕР»РѕРґРёР»СЊРЅРёРє СЃ РЅР°РёР±РѕР»СЊС€РµР№ РІРјРµСЃС‚РёРјРѕСЃС‚СЊСЋ(СЃСѓРјРјР° РІСЃРµС… РїСЂРѕРґСѓРєС‚РѕРІ Р±РѕР»СЊС€Рµ РІСЃРµРіРѕ)
 
 SELECT FridgeModels.Year
 FROM Fridges
@@ -165,7 +165,7 @@ FROM FridgeProducts
 GROUP BY FridgeProducts.FridgeId
 ORDER BY [SUM] DESC
 
---TASK 4 Выбрать все продукты и имя владельца из холодильника, в котором больше всего наименований продуктов. Именно наименований, не количества
+--TASK 4 Р’С‹Р±СЂР°С‚СЊ РІСЃРµ РїСЂРѕРґСѓРєС‚С‹ Рё РёРјСЏ РІР»Р°РґРµР»СЊС†Р° РёР· С…РѕР»РѕРґРёР»СЊРЅРёРєР°, РІ РєРѕС‚РѕСЂРѕРј Р±РѕР»СЊС€Рµ РІСЃРµРіРѕ РЅР°РёРјРµРЅРѕРІР°РЅРёР№ РїСЂРѕРґСѓРєС‚РѕРІ. РРјРµРЅРЅРѕ РЅР°РёРјРµРЅРѕРІР°РЅРёР№, РЅРµ РєРѕР»РёС‡РµСЃС‚РІР°
 
 SELECT Products.Title,Fridges.OwnerName
 FROM Products
@@ -194,15 +194,15 @@ FROM Fridges
 INNER JOIN FridgeModels on FridgeModels.Id = Fridges.FridgeModelId
 WHERE Fridges.Id ='5CF8CD9C-FEAC-43C9-A7C8-1C484CA1757F'
 
---Набор запросов 2
---TASK 5 Вывести все продукты для холодильника в id 2( или выбрать определенный Guid)
+--РќР°Р±РѕСЂ Р·Р°РїСЂРѕСЃРѕРІ 2
+--TASK 5 Р’С‹РІРµСЃС‚Рё РІСЃРµ РїСЂРѕРґСѓРєС‚С‹ РґР»СЏ С…РѕР»РѕРґРёР»СЊРЅРёРєР° РІ id 2( РёР»Рё РІС‹Р±СЂР°С‚СЊ РѕРїСЂРµРґРµР»РµРЅРЅС‹Р№ Guid)
 
 SELECT Products.Title 
 FROM Products
 INNER JOIN FridgeProducts on Products.Id = FridgeProducts.ProductId
 WHERE FridgeProducts.FridgeId = 'C7A5DD50-8272-4A3B-9561-0CA0EB1DDC3C'
 
---TASK 6 Вывести все продукты для всех холодильников
+--TASK 6 Р’С‹РІРµСЃС‚Рё РІСЃРµ РїСЂРѕРґСѓРєС‚С‹ РґР»СЏ РІСЃРµС… С…РѕР»РѕРґРёР»СЊРЅРёРєРѕРІ
 
 SELECT Products.Title, Fridges.Title
 FROM Fridges
@@ -210,14 +210,14 @@ LEFT JOIN FridgeProducts on Fridges.Id = FridgeProducts.FridgeId
 LEFT JOIN Products on Products.Id = FridgeProducts.ProductId
 GROUP BY Fridges.Title,Products.Title
 
---TASK 7 Вывести список холодильников и сумму всех продуктов для каждого из них
+--TASK 7 Р’С‹РІРµСЃС‚Рё СЃРїРёСЃРѕРє С…РѕР»РѕРґРёР»СЊРЅРёРєРѕРІ Рё СЃСѓРјРјСѓ РІСЃРµС… РїСЂРѕРґСѓРєС‚РѕРІ РґР»СЏ РєР°Р¶РґРѕРіРѕ РёР· РЅРёС…
 
 SELECT Fridges.Title, SUM(FridgeProducts.Quantity)
 FROM Fridges
 INNER JOIN FridgeProducts on Fridges.Id = FridgeProducts.FridgeId
 GROUP BY Fridges.Title
 
---TASK 8 Вывести имя холодильника, название и год модели, а также количество продуктов для каждого из них
+--TASK 8 Р’С‹РІРµСЃС‚Рё РёРјСЏ С…РѕР»РѕРґРёР»СЊРЅРёРєР°, РЅР°Р·РІР°РЅРёРµ Рё РіРѕРґ РјРѕРґРµР»Рё, Р° С‚Р°РєР¶Рµ РєРѕР»РёС‡РµСЃС‚РІРѕ РїСЂРѕРґСѓРєС‚РѕРІ РґР»СЏ РєР°Р¶РґРѕРіРѕ РёР· РЅРёС…
 
 SELECT Fridges.Title,FridgeModels.Title,FridgeModels.Year, SUM(FridgeProducts.Quantity)
 FROM Fridges
@@ -225,7 +225,7 @@ INNER JOIN FridgeProducts on Fridges.Id = FridgeProducts.FridgeId
 INNER JOIN FridgeModels on Fridges.FridgeModelId = FridgeModels.Id
 GROUP BY Fridges.Title,FridgeModels.Title,FridgeModels.Year
 
---TASK 9 Вывести список холодильников, где содержаться продукты, количество которых больше чем количество по умолчанию
+--TASK 9 Р’С‹РІРµСЃС‚Рё СЃРїРёСЃРѕРє С…РѕР»РѕРґРёР»СЊРЅРёРєРѕРІ, РіРґРµ СЃРѕРґРµСЂР¶Р°С‚СЊСЃСЏ РїСЂРѕРґСѓРєС‚С‹, РєРѕР»РёС‡РµСЃС‚РІРѕ РєРѕС‚РѕСЂС‹С… Р±РѕР»СЊС€Рµ С‡РµРј РєРѕР»РёС‡РµСЃС‚РІРѕ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
 
 SELECT Fridges.Title
 FROM Fridges 
@@ -235,7 +235,7 @@ WHERE EXISTS(
 				INNER JOIN Products on Products.Id = FridgeProducts.ProductId
 				WHERE FridgeProducts.Quantity > Products.DefaultQuantity and FridgeProducts.FridgeId = Fridges.Id
 			)
---TASK 10 Вывести список холодильников и для каждого холодильника количество наименований продуктов, количество которых юоьше чем количесвто по умолчанию
+--TASK 10 Р’С‹РІРµСЃС‚Рё СЃРїРёСЃРѕРє С…РѕР»РѕРґРёР»СЊРЅРёРєРѕРІ Рё РґР»СЏ РєР°Р¶РґРѕРіРѕ С…РѕР»РѕРґРёР»СЊРЅРёРєР° РєРѕР»РёС‡РµСЃС‚РІРѕ РЅР°РёРјРµРЅРѕРІР°РЅРёР№ РїСЂРѕРґСѓРєС‚РѕРІ, РєРѕР»РёС‡РµСЃС‚РІРѕ РєРѕС‚РѕСЂС‹С… СЋРѕСЊС€Рµ С‡РµРј РєРѕР»РёС‡РµСЃРІС‚Рѕ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
 
 SELECT Fridges.Title, COUNT(FridgeProducts.ProductId)
 FROM Fridges
