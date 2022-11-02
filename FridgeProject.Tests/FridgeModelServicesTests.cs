@@ -31,9 +31,9 @@ namespace FridgeProject.Tests
         }
 
         [Fact]
-        public async void GetByIdFridgeModelTest()
+        public async void TakeByIdFridgeModelTest()
         {
-            var options = new DbContextOptionsBuilder<AppDBContext>().UseInMemoryDatabase("GetById").Options;
+            var options = new DbContextOptionsBuilder<AppDBContext>().UseInMemoryDatabase("TakeById").Options;
             using var dbContext = new AppDBContext(options);
             var service = new FridgeModelServices(dbContext);
             await service.AddFridgeModel(new FridgeModel()
@@ -44,7 +44,7 @@ namespace FridgeProject.Tests
 
             Assert.True(dbContext.FridgeModels.Any(x => x.Title == "LG-170"));
 
-            var fridgeModel = await service.GetFridgeModelById(dbContext.FridgeModels.First().Id);
+            var fridgeModel = await service.TakeFridgeModelById(dbContext.FridgeModels.First().Id);
 
             Assert.True(fridgeModel.Title == "LG-170" && fridgeModel.Year == 2005);
         }
@@ -65,7 +65,7 @@ namespace FridgeProject.Tests
 
             var fridgeModel = await dbContext.FridgeModels.FirstOrDefaultAsync(fm => fm.Title == "LG-970");
 
-            await service.DeleteFridgeModel(await service.GetFridgeModelById(fridgeModel.Id));
+            await service.DeleteFridgeModel(await service.TakeFridgeModelById(fridgeModel.Id));
 
             Assert.False(dbContext.FridgeModels.Any(x => x.Title == "LG-970"));
         }
@@ -95,7 +95,7 @@ namespace FridgeProject.Tests
         [Fact]
         public async void GetFridgeModelsTest()
         {
-            var options = new DbContextOptionsBuilder<AppDBContext>().UseInMemoryDatabase("GetAll").Options;
+            var options = new DbContextOptionsBuilder<AppDBContext>().UseInMemoryDatabase("TakeAllFridgeModels").Options;
             using var dbContext = new AppDBContext(options);
             var service = new FridgeModelServices(dbContext);
 
@@ -123,7 +123,7 @@ namespace FridgeProject.Tests
 
             Assert.True(dbContext.FridgeModels.Any(x => x.Title == "ZELMA-070"));
 
-            var fridgeModels = await service.GetFridgeModels();
+            var fridgeModels = await service.TakeFridgeModels();
 
             Assert.True(
                 fridgeModels.Count == 3 

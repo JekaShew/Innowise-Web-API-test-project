@@ -21,10 +21,10 @@ namespace FridgeProject.Web.Client.Controllers
 
         }
         [HttpGet("Login")]
-        public async Task<IActionResult> Login()
+        public IActionResult Login()
         {
             ViewBag.UserNotFound = "";
-            return View(new LogInInfo());
+            return View("Login", new LogInInfo());
         }
 
         [HttpPost("Login")]

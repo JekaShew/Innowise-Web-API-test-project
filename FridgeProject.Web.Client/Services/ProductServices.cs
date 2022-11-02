@@ -21,33 +21,33 @@ namespace FridgeProject.Web.Client.Services
 
         public async Task AddProduct(Product product)
         {
-            var response = await SendRequest(HttpMethod.Post, "products", "addproduct", SerializeInJson(product));
+            var response = await SendRequest(HttpMethod.Post, "products", "add", SerializeInJson(product));
             response.EnsureSuccessStatusCode();
         }
 
         public async Task DeleteProduct(Product product)
         { 
-            var response = await SendRequest(HttpMethod.Delete, "products", "deleteproduct", SerializeInJson(product));
+            var response = await SendRequest(HttpMethod.Delete, "products", "delete", SerializeInJson(product));
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task<Product> GetProductById(Guid id)
+        public async Task<Product> TakeProductById(Guid id)
         {
-            var response = await SendRequest(HttpMethod.Get, "products", $"getproductbyid/{id}", null);
+            var response = await SendRequest(HttpMethod.Get, "products", $"takebyid/{id}", null);
             response.EnsureSuccessStatusCode();
             return await DeSerializeJson<Product>(response);
         }
 
-        public async Task<List<Product>> GetProducts()
+        public async Task<List<Product>> TakeProducts()
         {
-            var response = await SendRequest(HttpMethod.Get, "products", "getproducts", null);
+            var response = await SendRequest(HttpMethod.Get, "products", "takeall", null);
             response.EnsureSuccessStatusCode();
             return await DeSerializeJson<List<Product>>(response);
         }
 
         public async Task UpdateProduct(Product updatedProdcut)
         {
-            var response = await SendRequest(HttpMethod.Put, "products", "updateproduct", SerializeInJson(updatedProdcut));
+            var response = await SendRequest(HttpMethod.Put, "products", "update", SerializeInJson(updatedProdcut));
             response.EnsureSuccessStatusCode();
         }
 

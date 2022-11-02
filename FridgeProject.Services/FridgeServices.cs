@@ -17,16 +17,17 @@ namespace FridgeProject.Services
         {
             this.appDBContext = appDBContext;
         }
+
         public async Task AddFridge(Fridge fridge)
         {
-            var newFridge = new FridgeProject.Data.Models.Fridge
+            var newFridge = new Data.Models.Fridge
             {
                 Id = Guid.NewGuid(),
                 OwnerName = fridge.OwnerName,
                 Title = fridge.Title,
                 FridgeModelId = fridge.FridgeModel.Id
             };
-            appDBContext.FridgeProducts.AddRange(fridge.FridgeProducts.Select(fp => new FridgeProject.Data.Models.FridgeProduct
+            appDBContext.FridgeProducts.AddRange(fridge.FridgeProducts.Select(fp => new Data.Models.FridgeProduct
             {
                 Id = fp.Id,
                 FridgeId = newFridge.Id,
@@ -35,8 +36,7 @@ namespace FridgeProject.Services
             }));
 
             await appDBContext.AddAsync(newFridge);
-            await appDBContext.SaveChangesAsync();
-            
+            await appDBContext.SaveChangesAsync();   
         }
 
         public async Task DeleteFridge(Fridge fridge)
@@ -46,7 +46,7 @@ namespace FridgeProject.Services
             await appDBContext.SaveChangesAsync();
         }
 
-        public async Task<Fridge> GetFridgeById(Guid id)
+        public async Task<Fridge> TakeFridgeById(Guid id)
         {
             var fridge = await appDBContext.Fridges.AsNoTracking()
                 .Include(f => f.FridgeProducts)
@@ -80,7 +80,7 @@ namespace FridgeProject.Services
             };
         }
 
-        public async Task<List<Fridge>> GetFridges()
+        public async Task<List<Fridge>> TakeFridges()
         {
             var fridges = await appDBContext.Fridges.AsNoTracking()
                 .Include(f => f.FridgeProducts)
@@ -145,13 +145,13 @@ namespace FridgeProject.Services
             await appDBContext.SaveChangesAsync();
         }
 
-        public async Task<List<Fridge>> GetUpdatedFridgesWithoutQuantity()
+        public async Task<List<Fridge>> TakeUpdatedFridgesWithoutQuantity()
         {
             var fridgeProductWithotQuantity = await appDBContext.FridgeProducts.FromSqlRaw($"EXECUTE dbo.SelectFridgeProductWithoutQuantity").ToListAsync();
 
             foreach (var fridgeProduct in fridgeProductWithotQuantity)
             {
-                var fridge = await GetFridgeById(fridgeProduct.FridgeId);
+                var fridge = await TakeFridgeById(fridgeProduct.FridgeId);
                 var model = fridge.FridgeProducts.First(x => x.Product.Id == fridgeProduct.ProductId);
                 model.Quantity = model.Product.DefaultQuantity ?? 0;
                 await UpdateFridge(fridge);
@@ -159,7 +159,7 @@ namespace FridgeProject.Services
 
             var list = new List<Fridge>();
             foreach (var id in fridgeProductWithotQuantity.Select(x => x.FridgeId).Distinct())
-                list.Add(await GetFridgeById(id));
+                list.Add(await TakeFridgeById(id));
             return list; 
         }
     }

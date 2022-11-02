@@ -17,6 +17,7 @@ namespace FridgeProject.Services
         {
             this.appDBContext = appDBContext;
         }
+
         public async Task AddProduct(Product product)
         {
             var newProduct = new FridgeProject.Data.Models.Product
@@ -33,18 +34,17 @@ namespace FridgeProject.Services
         public async Task DeleteProduct(Product product)
         {
             var deletedProduct = await appDBContext.Products.Where(p => p.Id == product.Id).FirstOrDefaultAsync();
-            appDBContext.Products.Remove(deletedProduct);
+            appDBContext.Products.Remove(deletedProduct);  
             await appDBContext.SaveChangesAsync();
         }
 
-        public async Task<Product> GetProductById(Guid id)
+        public async Task<Product> TakeProductById(Guid id)
         {
             var product = await appDBContext.Products.AsNoTracking().Where(p => p.Id == id).FirstOrDefaultAsync();
             return new Product { Id = product.Id, Title = product.Title, DefaultQuantity = product.DefaultQuantity};
-
         }
 
-        public async Task<List<Product>> GetProducts()
+        public async Task<List<Product>> TakeProducts()
         {
             var products = await appDBContext.Products.AsNoTracking().Select(p => new Product 
                 {
@@ -76,11 +76,8 @@ namespace FridgeProject.Services
         {
             var updatedProduct = await appDBContext.Products.Where(p => p.Id == product.Id).FirstOrDefaultAsync();
             updatedProduct.Title = product.Title;
-            updatedProduct.DefaultQuantity = product.DefaultQuantity;
-            
-
+            updatedProduct.DefaultQuantity = product.DefaultQuantity;      
             await appDBContext.SaveChangesAsync();
-        
         }
     }
 }

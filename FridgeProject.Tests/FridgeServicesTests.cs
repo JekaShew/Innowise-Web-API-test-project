@@ -26,7 +26,7 @@ namespace FridgeProject.Tests
             });
 
             Assert.True(dbContext.FridgeModels.Any(x => x.Title == "LG-770" && x.Year == 2005));
-            var fridgeModel = await fridgeModelService.GetFridgeModelById(dbContext.FridgeModels.First().Id);          
+            var fridgeModel = await fridgeModelService.TakeFridgeModelById(dbContext.FridgeModels.First().Id);          
 
             await service.AddFridge(new Fridge()
             { 
@@ -40,9 +40,9 @@ namespace FridgeProject.Tests
         }
         
         [Fact]
-        public async void GetByIdFridgeTest()
+        public async void TakeByIdFridgeTest()
         {
-            var options = new DbContextOptionsBuilder<AppDBContext>().UseInMemoryDatabase("GetById").Options;
+            var options = new DbContextOptionsBuilder<AppDBContext>().UseInMemoryDatabase("TakeById").Options;
             using var dbContext = new AppDBContext(options);
             var fridgeModelService = new FridgeModelServices(dbContext);
             var service = new FridgeServices(dbContext);
@@ -54,7 +54,7 @@ namespace FridgeProject.Tests
             });
 
             Assert.True(dbContext.FridgeModels.Any(x => x.Title == "LG-770" && x.Year == 2005));
-            var fridgeModel = await fridgeModelService.GetFridgeModelById(dbContext.FridgeModels.First().Id);
+            var fridgeModel = await fridgeModelService.TakeFridgeModelById(dbContext.FridgeModels.First().Id);
 
             await service.AddFridge(new Fridge()
             {
@@ -76,7 +76,7 @@ namespace FridgeProject.Tests
 
             Assert.True(dbContext.Fridges.Any(x => x.Title == "Холодильник с водкой" && x.OwnerName == "Иван Иванович Иванов"));
 
-            var fridge = await service.GetFridgeById(dbContext.Fridges.FirstOrDefault(f => f.Title == "Холодильник с пивом").Id);
+            var fridge = await service.TakeFridgeById(dbContext.Fridges.FirstOrDefault(f => f.Title == "Холодильник с пивом").Id);
 
             Assert.True(fridge.Title == "Холодильник с пивом" 
                 && fridge.OwnerName == "Василий Иванович Федотов"
@@ -98,7 +98,7 @@ namespace FridgeProject.Tests
             });
 
             Assert.True(dbContext.FridgeModels.Any(x => x.Title == "LG-770" && x.Year == 2005));
-            var fridgeModel = await fridgeModelService.GetFridgeModelById(dbContext.FridgeModels.First().Id);
+            var fridgeModel = await fridgeModelService.TakeFridgeModelById(dbContext.FridgeModels.First().Id);
 
             await service.AddFridge(new Fridge()
             {
@@ -110,7 +110,7 @@ namespace FridgeProject.Tests
 
             Assert.True(dbContext.Fridges.Any(x => x.Title == "Холодильник с пивом" && x.OwnerName == "Василий Иванович Федотов"));
 
-            await service.DeleteFridge(await service.GetFridgeById(dbContext.Fridges.First().Id));
+            await service.DeleteFridge(await service.TakeFridgeById(dbContext.Fridges.First().Id));
 
             Assert.False(dbContext.Fridges.Any(f => f.Title == "Холодильник с пивом" && f.OwnerName == "Василий Иванович Федотов" && f.FridgeModelId == fridgeModel.Id));
         }  
@@ -131,7 +131,7 @@ namespace FridgeProject.Tests
             });
 
             Assert.True(dbContext.FridgeModels.Any(x => x.Title == "LG-770" && x.Year == 2005));
-            var fridgeModel1 = await fridgeModelService.GetFridgeModelById(dbContext.FridgeModels.FirstOrDefault(fm => fm.Title == "LG-770").Id);
+            var fridgeModel1 = await fridgeModelService.TakeFridgeModelById(dbContext.FridgeModels.FirstOrDefault(fm => fm.Title == "LG-770").Id);
 
             await fridgeModelService.AddFridgeModel(new FridgeModel()
             {
@@ -145,9 +145,9 @@ namespace FridgeProject.Tests
             await productService.AddProduct(new Product { Title = "Помидор", DefaultQuantity = 2 });
             
 
-            var products = await productService.GetProducts();
+            var products = await productService.TakeProducts();
 
-            var fridgeModel2 = await fridgeModelService.GetFridgeModelById(dbContext.FridgeModels.FirstOrDefault(fm => fm.Title == "ZELMA-70").Id);
+            var fridgeModel2 = await fridgeModelService.TakeFridgeModelById(dbContext.FridgeModels.FirstOrDefault(fm => fm.Title == "ZELMA-70").Id);
             await service.AddFridge(new Fridge()
             {
                 Title = "Холодильник с пивом",
@@ -179,7 +179,7 @@ namespace FridgeProject.Tests
                 Title = "Такой себе холодильник",
                 OwnerName = "Петриков Геннадий Викторович",
                 FridgeModel = fridgeModel2,
-                FridgeProducts = (await service.GetFridgeById(dbContext.Fridges.FirstOrDefault().Id)).FridgeProducts
+                FridgeProducts = (await service.TakeFridgeById(dbContext.Fridges.FirstOrDefault().Id)).FridgeProducts
             });
 
             Assert.True(
@@ -197,7 +197,7 @@ namespace FridgeProject.Tests
         [Fact]
         public async void GetAllFridgesTest()
         {
-            var options = new DbContextOptionsBuilder<AppDBContext>().UseInMemoryDatabase("GetAllFridges").Options;
+            var options = new DbContextOptionsBuilder<AppDBContext>().UseInMemoryDatabase("TakeAllFridges").Options;
             using var dbContext = new AppDBContext(options);
             var fridgeModelService = new FridgeModelServices(dbContext);
             var service = new FridgeServices(dbContext);
@@ -209,7 +209,7 @@ namespace FridgeProject.Tests
             });
 
             Assert.True(dbContext.FridgeModels.Any(x => x.Title == "LG-770" && x.Year == 2005));
-            var fridgeModel1 = await fridgeModelService.GetFridgeModelById(dbContext.FridgeModels.FirstOrDefault(fm => fm.Title == "LG-770").Id);
+            var fridgeModel1 = await fridgeModelService.TakeFridgeModelById(dbContext.FridgeModels.FirstOrDefault(fm => fm.Title == "LG-770").Id);
 
             await fridgeModelService.AddFridgeModel(new FridgeModel()
             {
@@ -218,7 +218,7 @@ namespace FridgeProject.Tests
             });
 
             Assert.True(dbContext.FridgeModels.Any(x => x.Title == "ZELMA-70" && x.Year == 2011));
-            var fridgeModel2 = await fridgeModelService.GetFridgeModelById(dbContext.FridgeModels.FirstOrDefault(fm => fm.Title == "ZELMA-70").Id);
+            var fridgeModel2 = await fridgeModelService.TakeFridgeModelById(dbContext.FridgeModels.FirstOrDefault(fm => fm.Title == "ZELMA-70").Id);
 
             await service.AddFridge(new Fridge()
             {
@@ -250,7 +250,7 @@ namespace FridgeProject.Tests
 
             Assert.True(dbContext.Fridges.Any(x => x.Title == "Холодильник с Энергетиком" && x.OwnerName == "Иван Федорович Слизерин"));
 
-            var fridges = await service.GetFridges();
+            var fridges = await service.TakeFridges();
 
             Assert.True(
                 fridges.Count == 3
@@ -285,13 +285,13 @@ namespace FridgeProject.Tests
             });
 
             Assert.True(dbContext.FridgeModels.Any(x => x.Title == "LG-770" && x.Year == 2005));
-            var fridgeModel = await fridgeModelService.GetFridgeModelById(dbContext.FridgeModels.First().Id);
+            var fridgeModel = await fridgeModelService.TakeFridgeModelById(dbContext.FridgeModels.First().Id);
 
             await productService.AddProduct( new Product { Title = "Огурец", DefaultQuantity = 3 });
             await productService.AddProduct(new Product { Title = "Помидор", DefaultQuantity = 2 });
             await productService.AddProduct(new Product { Title = "Капуста", DefaultQuantity = 1 });
 
-            var products = await productService.GetProducts();
+            var products = await productService.TakeProducts();
             await service.AddFridge(new Fridge()
             {
                 Title = "Холодильник с пивом",
@@ -322,7 +322,7 @@ namespace FridgeProject.Tests
         
             Assert.True(dbContext.Fridges.Any(x => x.Title == "Холодильник с пивом" && x.OwnerName == "Василий Иванович Федотов"));
 
-           var updatedFridges = await service.GetUpdatedFridgesWithoutQuantity();
+           var updatedFridges = await service.TakeUpdatedFridgesWithoutQuantity();
 
             Assert.True(
                 updatedFridges.Count == 1

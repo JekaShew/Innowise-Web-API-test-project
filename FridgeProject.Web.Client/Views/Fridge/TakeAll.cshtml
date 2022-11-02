@@ -6,11 +6,11 @@
 <h2>All Fridges</h2>
 <div>
     <button class="btn btn-outline-primary btn-sm font-weight-bold text-dark mr-4">
-        @Html.ActionLink("Add New Fridge", "AddFridge")
+        <a class="font-weight-bold text-dark" href="/Fridge/Add"> Add New Fridge </a>
     </button>
 
     <button class="btn btn-outline-primary btn-sm font-weight-bold text-dark">
-        @Html.ActionLink("Update Fridges with Product without Product Quantity", "UpdateFridgesQuantity")
+        <a class="font-weight-bold text-dark" href="/Fridge/UpdateFridgesQuantity"> Update Fridges with Product without Product Quantity </a>
     </button>
 </div>
 <table class="table mt-3 text-center">
@@ -72,11 +72,11 @@
                 
 
                 <button class="btn btn-outline-primary btn-sm ">
-                    @Html.ActionLink("Edit", "UpdateFridge", new { Id = item.Id }, new { @class = "font-weight-bold text-dark" })
+                    <a class="font-weight-bold text-dark" href="/Fridge/Update/@item.Id"> Edit </a>
                 </button>   |
 
                 <button class="btn btn-outline-primary btn-sm">
-                    @Html.ActionLink("Details", "GetFridgeById", new { Id = item.Id }, new { @class = "font-weight-bold text-dark" })
+                    <a class="font-weight-bold text-dark" href="/Fridge/TakeById/@item.Id"> Details </a>
                 </button>   |
 
                 <button class="btn btn-outline-danger btn-sm font-weight-bold text-dark" onclick="ConfirmModal('@item.Id')">
@@ -127,7 +127,7 @@
 
     var Delete = function () {
         let id = $('#selectedFridge').val();
-        window.location.href = ('/Fridge/Delete?Id=' + id );  
+        window.location.href = ('/Fridge/Delete/' + id );  
     };
     
 </script>

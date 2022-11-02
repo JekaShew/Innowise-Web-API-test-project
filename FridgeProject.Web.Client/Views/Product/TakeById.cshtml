@@ -6,7 +6,7 @@
 <h2>Product</h2>
 
 <button class="btn btn-outline-primary btn-sm font-weight-bold text-dark">
-    @Html.ActionLink("Back to Products", "GetProducts")
+    <a class="font-weight-bold text-dark" href="/Product/TakeAll"> Back to Products </a>
 </button>
 <table class="table mt-3 text-center">
     <thead class="thead-light">
@@ -31,7 +31,7 @@
         </td>
         <td>
             <button class="btn btn-outline-primary btn-sm ">
-                 @Html.ActionLink("Edit", "UpdateProduct", new { Id = Model.Id }, new { @class = "font-weight-bold text-dark" })
+                <a class="font-weight-bold text-dark" href="/Product/Update/@Model.Id"> Edit </a>
             </button>   |
 
             <button class="btn btn-outline-danger btn-sm font-weight-bold text-dark" onclick="ConfirmModal('@Model.Id')">
@@ -79,7 +79,7 @@
 
     var Delete = function () {
         let id = $('#selectedProduct').val();
-        window.location.href = ('/Product/Delete?Id=' + id);
+        window.location.href = ('/Product/Delete/' + id);
     };
 
 </script>

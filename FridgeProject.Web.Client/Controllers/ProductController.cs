@@ -20,12 +20,12 @@ namespace FridgeProject.Web.Client.Controllers
             this.productService = productService;
         }
 
-        [HttpGet("All")]
-        public async Task<ActionResult> GetProducts()
+        [HttpGet("TakeAll")]
+        public async Task<ActionResult> TakeAll()
         {
             try
             {
-                var result = await productService.GetProducts();
+                var result = await productService.TakeProducts();
                 return View(result);
             }
             catch (HttpRequestException e)
@@ -34,18 +34,13 @@ namespace FridgeProject.Web.Client.Controllers
             }
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult> GetProductById(Guid id)
+        [HttpGet("TakeById/{id}")]
+        public async Task<ActionResult> TakeById([FromRoute]Guid id)
         {
             try
             {
-                var result = await productService.GetProductById(id);
-                if (result != null)
-                {
-                    return View(result);
-                }
-                else
-                    return View();
+                var result = await productService.TakeProductById(id);
+                return View(result);
             }
             catch (HttpRequestException e)
             {
@@ -55,13 +50,13 @@ namespace FridgeProject.Web.Client.Controllers
         }
 
         [HttpGet("Add")]
-        public ActionResult AddProduct()
+        public ActionResult Add()
         {
             return View(new Product());
         }
 
         [HttpPost("Add")]
-        public async Task<IActionResult> AddProduct(Product product)
+        public async Task<IActionResult> Add(Product product)
         {
             try
             {
@@ -69,7 +64,7 @@ namespace FridgeProject.Web.Client.Controllers
                 {
 
                     await productService.AddProduct(product);
-                    return RedirectToAction(nameof(GetProducts));
+                    return RedirectToAction(nameof(TakeAll));
                 }
                 else
                     return View(product);
@@ -82,19 +77,14 @@ namespace FridgeProject.Web.Client.Controllers
         }
 
 
-        [HttpGet("Delete")]
-        public async Task<ActionResult> DeleteProduct(Guid id)
+        [HttpGet("Delete/{id}")]
+        public async Task<ActionResult> Delete([FromRoute]Guid id)
         {
             try
             {
-                var product = await productService.GetProductById(id);
-                if (product != null)
-                {
-                    await productService.DeleteProduct(product);
-                    return RedirectToAction(nameof(GetProducts));
-                }
-                else
-                    return View();
+                var product = await productService.TakeProductById(id);
+                await productService.DeleteProduct(product);
+                return RedirectToAction(nameof(TakeAll));
             }
             catch (HttpRequestException e)
             {
@@ -102,20 +92,20 @@ namespace FridgeProject.Web.Client.Controllers
             }
         }
 
-        [HttpGet("Update")]
-        public async Task<ActionResult> UpdateProduct(Guid id)
+        [HttpGet("Update/{id}")]
+        public async Task<ActionResult> Update([FromRoute] Guid id)
         {
-            return View(await productService.GetProductById(id));
+            return View(await productService.TakeProductById(id));
         }
         [HttpPost("Update")]
-        public async Task<ActionResult> UpdateProduct(Product product)
+        public async Task<ActionResult> Update(Product product)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
                     await productService.UpdateProduct(product);
-                    return RedirectToAction(nameof(GetProducts));
+                    return RedirectToAction(nameof(TakeAll));
                 }
                 else
                     return View(product);

@@ -25,12 +25,12 @@ namespace FridgeProject.Web.Client.Controllers
             this.fridgeModelServices = fridgeModelServices;
         }
 
-        [HttpGet("All")]
-        public async Task<ActionResult> GetFridges()
+        [HttpGet("TakeAll")]
+        public async Task<ActionResult> TakeAll()
         {
             try
             {
-                var result = await fridgeServices.GetFridges();
+                var result = await fridgeServices.TakeFridges();
                 return View(result);
             }
             catch (HttpRequestException e)
@@ -39,18 +39,13 @@ namespace FridgeProject.Web.Client.Controllers
             }
         }
 
-        [HttpGet("GetFridgeById")]
-        public async Task<ActionResult> GetFridgeById(Guid id)
+        [HttpGet("TakeById/{id}")]
+        public async Task<ActionResult> TakeById([FromRoute]Guid id)
          {
             try
             {
-                var result = await fridgeServices.GetFridgeById(id);
-                if (result != null)
-                {
-                    return View(result);
-                }
-                else
-                    return View();
+                var result = await fridgeServices.TakeFridgeById(id);
+                return View(result);
             }
             catch (HttpRequestException e)
             {
@@ -59,30 +54,30 @@ namespace FridgeProject.Web.Client.Controllers
         }
        
         [HttpGet("Add")]
-        public async Task<ActionResult> AddFridge()
+        public async Task<ActionResult> Add()
         {
             var fridgeWithFridgeModels = new FridgeWithFridgeModels
             {
                 Fridge = new Fridge(),
-                FridgeModels = await fridgeModelServices.GetFridgeModels(),
+                FridgeModels = await fridgeModelServices.TakeFridgeModels(),
             };
             return View(fridgeWithFridgeModels);
         }
 
         [HttpPost("Add")]
-        public async Task<IActionResult> AddFridge(FridgeWithFridgeModels fridgeWithFridgeModels)
+        public async Task<IActionResult> Add([FromForm]FridgeWithFridgeModels fridgeWithFridgeModels)
         {
             try
             {
                 var fridge = new Fridge();
                 fridge.Title = fridgeWithFridgeModels.Fridge.Title;
                 fridge.OwnerName = fridgeWithFridgeModels.Fridge.OwnerName;
-                fridge.FridgeModel = await fridgeModelServices.GetFridgeModelById(fridgeWithFridgeModels.FridgeModelId);
+                fridge.FridgeModel = await fridgeModelServices.TakeFridgeModelById(fridgeWithFridgeModels.FridgeModelId);
                 fridge.FridgeProducts = new List<FridgeProduct>();
                 if (ModelState.IsValid)
                 {
                     await fridgeServices.AddFridge(fridge);
-                    return RedirectToAction(nameof(GetFridges));
+                    return RedirectToAction(nameof(TakeAll));
                 }
                 else
                     return View(fridge);
@@ -93,19 +88,14 @@ namespace FridgeProject.Web.Client.Controllers
             }
         }
 
-        [HttpGet("Delete")]
-        public async Task<ActionResult> DeleteFridge(Guid id)
+        [HttpGet("Delete/{id}")]
+        public async Task<ActionResult> Delete([FromRoute]Guid id)
         {
             try
             {
-                var product = await fridgeServices.GetFridgeById(id);
-                if (product != null)
-                {
-                    await fridgeServices.DeleteFridge(product);
-                    return RedirectToAction(nameof(GetFridges));
-                }
-                else
-                    return View();
+                var fridge = await fridgeServices.TakeFridgeById(id);       
+                await fridgeServices.DeleteFridge(fridge);
+                return RedirectToAction(nameof(TakeAll)); 
             }
             catch (HttpRequestException e)
             {
@@ -113,18 +103,19 @@ namespace FridgeProject.Web.Client.Controllers
             }
         }
 
-        [HttpGet("Update")]
-        public async Task<ActionResult> UpdateFridge(Guid id)
+        [HttpGet("Update/{id}")]
+        public async Task<ActionResult> Update([FromRoute]Guid id)
         {           
             return View(new FridgeWithFridgeModels
             {
-                Fridge = await fridgeServices.GetFridgeById(id),
-                FridgeModels = await fridgeModelServices.GetFridgeModels(),
-                FridgeModelId = (await fridgeServices.GetFridgeById(id)).FridgeModel.Id
+                Fridge = await fridgeServices.TakeFridgeById(id),
+                FridgeModels = await fridgeModelServices.TakeFridgeModels(),
+                FridgeModelId = (await fridgeServices.TakeFridgeById(id)).FridgeModel.Id
             });
         }
+
         [HttpPost("Update")]
-        public async Task<ActionResult> UpdateFridge(FridgeWithFridgeModels fridgeWithFridgeModels)
+        public async Task<ActionResult> Update([FromForm]FridgeWithFridgeModels fridgeWithFridgeModels)
         {
            try
             { 
@@ -132,14 +123,14 @@ namespace FridgeProject.Web.Client.Controllers
                 if (ModelState.IsValid)
                 {
                 
-                        fridge.FridgeProducts = (await fridgeServices.GetFridgeById(fridge.Id)).FridgeProducts;
-                        fridge.FridgeModel = await fridgeModelServices.GetFridgeModelById(fridgeWithFridgeModels.FridgeModelId);
+                        fridge.FridgeProducts = (await fridgeServices.TakeFridgeById(fridge.Id)).FridgeProducts;
+                        fridge.FridgeModel = await fridgeModelServices.TakeFridgeModelById(fridgeWithFridgeModels.FridgeModelId);
                         await fridgeServices.UpdateFridge(fridge);
-                        return RedirectToAction(nameof(GetFridges));
+                        return RedirectToAction(nameof(TakeAll));
                 
                 }
                 else
-                    fridgeWithFridgeModels.FridgeModels = await fridgeModelServices.GetFridgeModels();
+                    fridgeWithFridgeModels.FridgeModels = await fridgeModelServices.TakeFridgeModels();
                     return View(fridgeWithFridgeModels);}
            catch (HttpRequestException e)
            {
@@ -148,7 +139,7 @@ namespace FridgeProject.Web.Client.Controllers
         }
 
         [HttpGet("UpdateFridgesQuantity")]
-        public async Task<ActionResult> UpdateFridgesQuantityGet()
+        public ActionResult ShowUpdateFridgesQuantity()
         {
             return View("UpdateFridgesQuantity", new List<Fridge>());
         }
@@ -158,8 +149,8 @@ namespace FridgeProject.Web.Client.Controllers
         {
             try
             {
-                var updatedFrigesWithoutQuantity = await fridgeServices.GetUpdatedFridgesWithoutQuantity();
-                return View(updatedFrigesWithoutQuantity);
+                var updatedFrigesWithoutQuantity = await fridgeServices.TakeUpdatedFridgesWithoutQuantity();
+                return View("UpdateFridgesQuantity", updatedFrigesWithoutQuantity);
             }
             catch (HttpRequestException e)
             {
@@ -167,15 +158,15 @@ namespace FridgeProject.Web.Client.Controllers
             }     
         }
 
-        [HttpGet("SelectProducts")]
-        public async Task<IActionResult> SelectProducts(Guid fridgeId)
+        [HttpGet("SelectProducts/{fridgeId}")]
+        public async Task<IActionResult> SelectProducts([FromRoute]Guid fridgeId)
         {
             try
             {
-                var products = await productServices.GetProducts();
+                var products = await productServices.TakeProducts();
                 var fridgeWithProducts = new FridgeWithProducts
                 {
-                    Fridge = await fridgeServices.GetFridgeById(fridgeId),
+                    Fridge = await fridgeServices.TakeFridgeById(fridgeId),
                     Products = products
                 };
                 return View(fridgeWithProducts);
@@ -185,54 +176,21 @@ namespace FridgeProject.Web.Client.Controllers
                 return CatchHttpRequestExeption(e);
             }
         }
-        [HttpGet("SelectExistedProducts")]
-        public async Task<IActionResult> SelectExistedProducts(Guid fridgeId)
-        {
-            try
-            {
-                var existedProducts = (await fridgeServices.GetFridgeById(fridgeId)).FridgeProducts.ToList();
-                var fridgeWithExistedProducts = new FridgeWithExistedProducts
-                {
-                    Fridge = await fridgeServices.GetFridgeById(fridgeId),
-                    ExistedProducts = existedProducts
-                };
-                return View(fridgeWithExistedProducts);
-            }
-            catch (HttpRequestException e)
-            {
-                return CatchHttpRequestExeption(e);
-            }
-        }
 
-        [HttpGet("SelectedProduct")]
-        public async Task<IActionResult> SelectedProduct(Guid productId, Guid fridgeId)
+        [HttpGet("SelectedProduct/{productId}/{fridgeId}")]
+        public async Task<IActionResult> ShowSelectedProduct([FromRoute]Guid productId, Guid fridgeId)
         {
             try
             {
-                var product = await productServices.GetProductById(productId);
+                var product = await productServices.TakeProductById(productId);
 
                 var selectedFridgeProduct = new FridgeProduct
                 {
-                    Fridge = await fridgeServices.GetFridgeById(fridgeId),
+                    Fridge = await fridgeServices.TakeFridgeById(fridgeId),
                     Product = product,
                     Quantity = product.DefaultQuantity.Value
                 };
-                return View(selectedFridgeProduct);
-            }
-            catch (HttpRequestException e)
-            {
-                return CatchHttpRequestExeption(e);
-            }
-        }
-
-        [HttpGet("SelectedExistedProduct")]
-        public async Task<IActionResult> SelectedExistedProduct(Guid fridgeProductId,Guid fridgeId)
-        {
-            try
-            {
-                var fridgeProduct = (await fridgeServices.GetFridgeById(fridgeId)).FridgeProducts.FirstOrDefault(fp => fp.Id == fridgeProductId);
-
-                return View(fridgeProduct);
+                return View("SelectedProduct", selectedFridgeProduct);
             }
             catch (HttpRequestException e)
             {
@@ -241,39 +199,39 @@ namespace FridgeProject.Web.Client.Controllers
         }
 
         [HttpPost("SelectedProduct")]
-        public async Task<IActionResult> SelectedProduct(SelectedProduct selectedProductToPut)
+        public async Task<IActionResult> AddSelectedProduct([FromForm]SelectedProduct selectedProductToPut)
         {
             try
             {
-                var fridge = await fridgeServices.GetFridgeById(selectedProductToPut.FridgeId);
-                var selectedProduct = await productServices.GetProductById(selectedProductToPut.ProductId);
+                var fridge = await fridgeServices.TakeFridgeById(selectedProductToPut.FridgeId);
+                var selectedProduct = await productServices.TakeProductById(selectedProductToPut.ProductId);
                 var existingFridgeProduct = fridge.FridgeProducts.FirstOrDefault(fp => fp.Product.Equals(selectedProduct));
 
                 var selectedFridgeProduct = new FridgeProduct
                 {
-                    Fridge = await fridgeServices.GetFridgeById(selectedProductToPut.FridgeId),
+                    Fridge = await fridgeServices.TakeFridgeById(selectedProductToPut.FridgeId),
                     Product = selectedProduct,
                     Quantity = selectedProductToPut.Quantity
                 };
                 if (ModelState.IsValid)
                 {
-                        if (existingFridgeProduct != null)
+                    if (existingFridgeProduct != null)
+                    {
+                        existingFridgeProduct.Quantity += selectedProductToPut.Quantity;
+
+                    }
+                    else
+                        fridge.FridgeProducts.Add(new FridgeProduct
                         {
-                            existingFridgeProduct.Quantity += selectedProductToPut.Quantity;
+                            Fridge = fridge,
+                            Product = selectedProduct,
+                            Quantity = selectedProductToPut.Quantity
+                        });
 
-                        }
-                        else
-                            fridge.FridgeProducts.Add(new FridgeProduct
-                            {
-                                Fridge = fridge,
-                                Product = selectedProduct,
-                                Quantity = selectedProductToPut.Quantity
-                            });
-
-                        await fridgeServices.UpdateFridge(fridge);
-                        return Redirect($"/Fridge/SelectProducts?FridgeId={selectedProductToPut.FridgeId}");
+                    await fridgeServices.UpdateFridge(fridge);
+                    return Redirect($"/Fridge/SelectProducts/{selectedProductToPut.FridgeId}");
                 }
-                else return View(selectedFridgeProduct);
+                else return View("SelectedProduct",selectedFridgeProduct);
             }
             catch (HttpRequestException e)
             {
@@ -281,12 +239,51 @@ namespace FridgeProject.Web.Client.Controllers
             }
         }
 
-        [HttpPost("SelectedExistedProduct")]
-        public async Task<IActionResult> SelectedExistedProduct(SelectedFridgeProduct selectedFridgeProductToTake)
+        [HttpGet("SelectExistedProducts/{fridgeId}")]
+        public async Task<IActionResult> SelectExistedProducts([FromRoute]Guid fridgeId)
         {
             try
             {
-                var fridge = await fridgeServices.GetFridgeById(selectedFridgeProductToTake.FridgeId);
+                var existedProducts = (await fridgeServices.TakeFridgeById(fridgeId)).FridgeProducts.ToList();
+                var fridgeWithExistedProducts = new FridgeWithExistedProducts
+                {
+                    Fridge = await fridgeServices.TakeFridgeById(fridgeId),
+                    ExistedProducts = existedProducts
+                };
+                return View("SelectExistedProducts",fridgeWithExistedProducts);
+            }
+            catch (HttpRequestException e)
+            {
+                return CatchHttpRequestExeption(e);
+            }
+        }
+
+        
+
+        [HttpGet("SelectedExistedProduct/{fridgeProductId}/{fridgeId}")]
+        public async Task<IActionResult> ShowSelectedExistedProduct([FromRoute]Guid fridgeProductId,Guid fridgeId)
+        {
+            try
+            {
+                var fridgeProduct = (await fridgeServices.TakeFridgeById(fridgeId)).FridgeProducts.FirstOrDefault(fp => fp.Id == fridgeProductId);
+                fridgeProduct.Fridge = await fridgeServices.TakeFridgeById(fridgeId);
+
+                return View("SelectedExistedProduct",fridgeProduct);
+            }
+            catch (HttpRequestException e)
+            {
+                return CatchHttpRequestExeption(e);
+            }
+        }
+
+        
+
+        [HttpPost("SelectedExistedProduct")]
+        public async Task<IActionResult> TakeSelectedExistedProduct([FromForm]SelectedFridgeProduct selectedFridgeProductToTake)
+        {
+            try
+            {
+                var fridge = await fridgeServices.TakeFridgeById(selectedFridgeProductToTake.FridgeId);
                 var selecteFridgeProduct = fridge
                     .FridgeProducts.FirstOrDefault(fp => fp.Id == selectedFridgeProductToTake.FridgeProductId);
 
@@ -300,15 +297,15 @@ namespace FridgeProject.Web.Client.Controllers
                             .Quantity = selecteFridgeProduct.Quantity - selectedFridgeProductToTake.Quantity;
 
                         await fridgeServices.UpdateFridge(fridge);
-                        return Redirect($"/Fridge/GetFridgeById?Id={selectedFridgeProductToTake.FridgeId}");
+                        return Redirect($"/Fridge/TakeById/{selectedFridgeProductToTake.FridgeId}");
                     }
                     else
                     {
                         ViewBag.QuantityError = "You can't Take more than exists!";
-                        return View(selecteFridgeProduct);
+                        return View("SelectedExistedProduct",selecteFridgeProduct);
                     }
                 }
-                else return View(selecteFridgeProduct);
+                else return View("SelectedExistedProduct", selecteFridgeProduct);
             }
             catch (HttpRequestException e)
             {
@@ -317,16 +314,16 @@ namespace FridgeProject.Web.Client.Controllers
             
         }
 
-        [HttpGet("DeleteProduct")]
-        public async Task<IActionResult> DeleteProduct(Guid productId, Guid fridgeId)
+        [HttpGet("DeleteProduct/{productId}/{fridgeId}")]
+        public async Task<IActionResult> DeleteProduct([FromRoute]Guid productId, Guid fridgeId)
         {
             try
             {
-                var product = await productServices.GetProductById(productId);
-                var fridge = await fridgeServices.GetFridgeById(fridgeId);
+                var product = await productServices.TakeProductById(productId);
+                var fridge = await fridgeServices.TakeFridgeById(fridgeId);
                 fridge.FridgeProducts.Remove(fridge.FridgeProducts.FirstOrDefault(fp => fp.Product.Equals(product)));
                 await fridgeServices.UpdateFridge(fridge);
-                return Redirect($"/Fridge/GetFridgeById?Id={fridgeId}");
+                return Redirect($"/Fridge/TakeById/{fridgeId}");
             }
             catch (HttpRequestException e)
             {

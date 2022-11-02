@@ -20,7 +20,7 @@ namespace FridgeProject.Services
         }
         public async Task AddFridgeModel(FridgeModel fridgeModel)
         {
-            var newFridgeModel = new FridgeProject.Data.Models.FridgeModel
+            var newFridgeModel = new Data.Models.FridgeModel
             {
                 Id = Guid.NewGuid(),
                 Title = fridgeModel.Title,
@@ -29,7 +29,6 @@ namespace FridgeProject.Services
 
             await appDBContext.FridgeModels.AddAsync(newFridgeModel);
             await appDBContext.SaveChangesAsync();
-
         }
         
         public async Task DeleteFridgeModel(FridgeModel fridgeModel)
@@ -39,7 +38,7 @@ namespace FridgeProject.Services
             await appDBContext.SaveChangesAsync();   
         }
 
-        public async Task<List<FridgeModel>> GetFridgeModels()
+        public async Task<List<FridgeModel>> TakeFridgeModels()
         {
             var fridgeModels = await appDBContext.FridgeModels.AsNoTracking()
                 .Select(fm => new FridgeModel
@@ -52,7 +51,7 @@ namespace FridgeProject.Services
             return fridgeModels;
         }
 
-        public async Task<FridgeModel> GetFridgeModelById(Guid id)
+        public async Task<FridgeModel> TakeFridgeModelById(Guid id)
         {
             var selectedFridgeModel = await appDBContext.FridgeModels.AsNoTracking().Where(fm => fm.Id == id).FirstAsync ();
             

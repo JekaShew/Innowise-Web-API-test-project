@@ -1,21 +1,21 @@
 @{
-    ViewBag.Title = "All Products";
+    ViewBag.Title = "All Fridge Models";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@model List<FridgeProject.Abstract.Data.Product>
-<h2>All Products</h2>
+@model List<FridgeProject.Abstract.Data.FridgeModel>
+<h2>Fridge Models</h2>
 
-<button class="btn btn-outline-primary btn-sm font-weight-bold text-dark ">
-    @Html.ActionLink("Add New Product", "AddProduct")
+<button class="btn btn-outline-primary btn-sm font-weight-bold text-dark">
+    <a class="font-weight-bold text-dark" href="/FridgeModel/Add"> Add New Fridge Model </a>
 </button>
-<table class="table table text-center mt-3">
-    <thead class="thead-light">
+<table class="table text-center mt-3">
+    <thead class="thead-light ">
         <tr>
             <th>
                 Title
             </th>
             <th>
-                Default Quantity
+                Year
             </th>
             <th>
                 Action
@@ -30,33 +30,33 @@
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DefaultQuantity)
+                @Html.DisplayFor(modelItem => item.Year)
             </td>
             <td>
                 <button class="btn btn-outline-primary btn-sm ">
-                    @Html.ActionLink("Edit", "UpdateProduct", new { Id = item.Id }, new { @class = "font-weight-bold text-dark" })
+                    <a class="font-weight-bold text-dark" href="/FridgeModel/Update/@item.Id"> Edit </a>
                 </button>   |
 
                 <button class="btn btn-outline-primary btn-sm ">
-                    @Html.ActionLink("Details", "GetProductById", new { Id = item.Id }, new { @class = "font-weight-bold text-dark" })
+                    <a class="font-weight-bold text-dark" href="/FridgeModel/TakeById/@item.Id"> Details </a>
                 </button>   |
-
+  
                 <button class="btn btn-outline-danger btn-sm font-weight-bold text-dark" onclick="ConfirmModal('@item.Id')">
                     Delete
                 </button>
-            <td>
+<td>
         </tr>
     }
 
 </table>
 
-<input type="hidden" id="selectedProduct" />
+<input type="hidden" id="selectedFridgeModel" />
 
-<div class="modal" tabindex="-1" role="dialog" id="deletingProduct">
+<div class="modal" tabindex="-1" role="dialog" id="deletingFridgeModel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Deliting Product</h5>
+                <h5 class="modal-title">Deliting Fridge Model</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -65,7 +65,7 @@
                 <h2>Are you shure ?</h2>
             </div>
             <div class="modal-footer">
-                <button type="button" id="btnDeleteProduct" class="btn btn-danger font-weight-bold text-dark" onclick=Delete()>
+                <button type="button" id="btnDeleteFridgeModel" class="btn btn-danger font-weight-bold text-dark" onclick=Delete()>
                     Yes, Delete
                 </button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick=Back()>Back</button>
@@ -76,17 +76,17 @@
 
 <script>
     var Back = function () {
-        $('#deletingProduct').modal('hide');
+        $('#deletingFridgeModel').modal('hide');
     };
 
     var ConfirmModal = function (id) {
-        $('#deletingProduct').modal('show');
-        $('#selectedProduct').val(id);
+        $('#deletingFridgeModel').modal('show');
+        $('#selectedFridgeModel').val(id);
     };
 
     var Delete = function () {
-        let id = $('#selectedProduct').val();
-        window.location.href = ('/Product/Delete?Id=' + id);
+        let id = $('#selectedFridgeModel').val();
+        window.location.href = ('/FridgeModel/Delete/' + id );
     };
 
 </script>

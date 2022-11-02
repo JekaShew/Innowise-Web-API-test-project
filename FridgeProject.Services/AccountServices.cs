@@ -62,7 +62,6 @@ namespace FridgeProject.Services
                 };
             }
         }
-    
 
         public Task LogOut()
         {
@@ -78,6 +77,5 @@ namespace FridgeProject.Services
 
             return new ClaimsIdentity(claims, ClaimsIdentity.DefaultRoleClaimType);
         }
-
     }
 }

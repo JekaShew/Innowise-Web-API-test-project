@@ -6,7 +6,7 @@
 <h2>Fridge Models</h2>
 
 <button class="btn btn-outline-primary btn-sm font-weight-bold text-dark">
-    @Html.ActionLink("Back to Fridge Models", "GetFridgeModels")
+    <a class="font-weight-bold text-dark" href="/FridgeModel/TakeAll"> Back to Fridge Models </a>
 </button>
 <table class="table mt-3 text-center">
     <thead class="thead-light">
@@ -33,7 +33,7 @@
         </td>
         <td>
             <button class="btn btn-outline-primary btn-sm ">
-                @Html.ActionLink("Edit", "UpdateFridgeModel", new { Id = Model.Id }, new { @class = "font-weight-bold text-dark" })
+                <a class="font-weight-bold text-dark" href="/FridgeModel/Update/@Model.Id"> Edit </a>
             </button>   |
 
             <button class="btn btn-outline-danger btn-sm font-weight-bold text-dark" onclick="ConfirmModal('@Model.Id')">
@@ -82,7 +82,7 @@
 
     var Delete = function () {
         let id = $('#selectedFridgeModel').val();
-        window.location.href = ('/FridgeModel/Delete?Id=' + id);
+        window.location.href = ('/FridgeModel/Delete/' + id);
     };
 
 </script>

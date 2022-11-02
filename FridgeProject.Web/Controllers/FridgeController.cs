@@ -20,114 +20,68 @@ namespace FridgeProject.Web.Controllers
         }
 
         [Authorize(Roles = "Client,Admin")]
-        [HttpGet("getfridgebyid/{id}")]
+        [HttpGet("takebyid/{id}")]
         public async Task<IActionResult> GetFridgeModelById(Guid id)
         {
-            var result = await fridgeServices.GetFridgeById(id);
-            if (this.HttpContext.User.Identity.IsAuthenticated == true)
-                if (result != null)
-                    return Ok(result);
-                else
-                    return NotFound();
+            var result = await fridgeServices.TakeFridgeById(id);
+            if (result != null)
+                return Ok(result);
             else
-                return Unauthorized();
+                return NotFound();
         }
 
         [Authorize(Roles = "Client,Admin")]
-        [HttpGet("getfridges")]
+        [HttpGet("takeall")]
         public async Task<IActionResult> GetFridges( )
         {
-            var result = await fridgeServices.GetFridges();
-            if (this.HttpContext.User.Identity.IsAuthenticated == true)
-                if (result != null)
-                    return Ok(result);
-                else
-                    return NotFound();
+            var result = await fridgeServices.TakeFridges();          
+            if (result != null)
+                return Ok(result);
             else
-            return Unauthorized();
+                return NotFound();
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("deletefridge")]
+        [HttpDelete("delete")]
         public async Task<IActionResult> DeleteFridge([FromBody] Fridge fridge)
         {
-            if (this.HttpContext.User.Identity.IsAuthenticated == true) 
-            {
-                if (this.HttpContext.User.IsInRole("Admin"))
-                {
-                    await fridgeServices.DeleteFridge(fridge);
-                    return Ok();
-                }
-                else return Forbid();
-            }         
-            else return Unauthorized();                   
+            await fridgeServices.DeleteFridge(fridge);
+            return Ok();               
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("addfridge")]
+        [HttpPost("add")]
         public async Task<IActionResult> AddFridge([FromBody] Fridge fridge)
         {
-            if (this.HttpContext.User.Identity.IsAuthenticated == true)
-            {
-                if (this.HttpContext.User.IsInRole("Admin"))
-                {
-                    await fridgeServices.AddFridge(fridge);
-                    return Ok();
-                }
-                else return Forbid();
-            }
-            else return Unauthorized();
+            await fridgeServices.AddFridge(fridge);
+            return Ok();
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut("updatefridge")]
+        [HttpPut("update")]
         public async Task<IActionResult> UpdateFridge([FromBody]Fridge fridge)
         {
-            if (this.HttpContext.User.Identity.IsAuthenticated == true)
-            {
-                if (this.HttpContext.User.IsInRole("Admin"))
-                {
-                    await fridgeServices.UpdateFridge(fridge);
-                    return Ok();
-                }
-                else return Forbid();
-            }
-            else return Unauthorized();
+            await fridgeServices.UpdateFridge(fridge);
+            return Ok();
         }
+
         [Authorize(Roles = "Admin")]
         [HttpPut("updatefridgeproductswithoutquantity")]
         public async Task<IActionResult> UpdateFridgeProductsWithoutQuantity()
         {  
-            if (this.HttpContext.User.Identity.IsAuthenticated == true)
-            {
-                if (this.HttpContext.User.IsInRole("Admin"))
-                {
-                    await fridgeServices.UpdateFridgeProductsWithoutQuantity();
-                    return Ok();
-                }
-                else return Forbid();
-            }
-            else return Unauthorized();
-
+            await fridgeServices.UpdateFridgeProductsWithoutQuantity();
+            return Ok();  
         }
+
         [Authorize(Roles = "Admin")]
-        [HttpPut("getandupdatefridgeswithoutquantity")]
+        [HttpPut("takeandupdatefridgeswithoutquantity")]
         public async Task<IActionResult> GetUpdatedFridgeProductsWothoutQuantity()
         {
-            if (this.HttpContext.User.Identity.IsAuthenticated == true)
-            {
-                if (this.HttpContext.User.IsInRole("Admin"))
-                {
-                    var updatedFridgesWithoutQuantity = await fridgeServices.GetUpdatedFridgesWithoutQuantity();
-                    if (updatedFridgesWithoutQuantity != null)
-                        return Ok(updatedFridgesWithoutQuantity);
-                    else
-                        return NotFound();
-                    
-                }
-                else return Forbid();
-            }
-            else return Unauthorized();  
+            var updatedFridgesWithoutQuantity = await fridgeServices.TakeUpdatedFridgesWithoutQuantity();
+            if (updatedFridgesWithoutQuantity != null)
+                return Ok(updatedFridgesWithoutQuantity);
+            else
+                return NotFound();
         }   
     }
 }

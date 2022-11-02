@@ -20,12 +20,12 @@ namespace FridgeProject.Web.Client.Controllers
             this.fridgeModelService = fridgeModelService;
         }
 
-        [HttpGet("All")]
-        public async Task<ActionResult> GetFridgeModels()
+        [HttpGet("TakeAll")]
+        public async Task<ActionResult> TakeAll()
         {
             try
             {
-                var result = await fridgeModelService.GetFridgeModels();
+                var result = await fridgeModelService.TakeFridgeModels();
                 return View(result);
             }
             catch (HttpRequestException e)
@@ -34,18 +34,13 @@ namespace FridgeProject.Web.Client.Controllers
             }
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult> GetFridgeModelById(Guid id)
+        [HttpGet("TakeById/{id}")]
+        public async Task<ActionResult> TakeById([FromRoute]Guid id)
         {
             try
             {
-                var result = await fridgeModelService.GetFridgeModelById(id);
-                if (result != null)
-                {
-                    return View(result);
-                }
-                else
-                    return View();
+                var result = await fridgeModelService.TakeFridgeModelById(id);
+                return View(result);
             }
             catch (HttpRequestException e)
             {
@@ -54,21 +49,20 @@ namespace FridgeProject.Web.Client.Controllers
         }
 
         [HttpGet("Add")]
-        public ActionResult AddFridgeModel()
+        public ActionResult Add()
         {
             return View(new FridgeModel());
         }
 
         [HttpPost("Add")]
-        public async Task<IActionResult> AddFridgeModel(FridgeModel fridgeModel)
+        public async Task<IActionResult> Add(FridgeModel fridgeModel)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                
-                        await fridgeModelService.AddFridgeModel(fridgeModel);
-                        return RedirectToAction(nameof(GetFridgeModels));
+                    await fridgeModelService.AddFridgeModel(fridgeModel);
+                    return RedirectToAction(nameof(TakeAll));
                 } 
                 else
                     return View(fridgeModel);
@@ -80,19 +74,14 @@ namespace FridgeProject.Web.Client.Controllers
             } 
         }
 
-        [HttpGet("Delete")]
-        public async Task<ActionResult> DeleteFridgeModel(Guid id)
+        [HttpGet("Delete/{id}")]
+        public async Task<ActionResult> Delete([FromRoute]Guid id)
         {
             try
             {
-                var fridgeModel = await fridgeModelService.GetFridgeModelById(id);
-                if (fridgeModel != null)
-                {
-                    await fridgeModelService.DeleteFridgeModel(fridgeModel);
-                    return RedirectToAction(nameof(GetFridgeModels));
-                }
-                else
-                    return View();
+                var fridgeModel = await fridgeModelService.TakeFridgeModelById(id);
+                await fridgeModelService.DeleteFridgeModel(fridgeModel);
+                return RedirectToAction(nameof(TakeAll));
             }
             catch (HttpRequestException e)
             {
@@ -100,12 +89,12 @@ namespace FridgeProject.Web.Client.Controllers
             }
         }
 
-        [HttpGet("Update")]
-        public async Task<ActionResult> UpdateFridgeModel(Guid id)
+        [HttpGet("Update/{id}")]
+        public async Task<ActionResult> Update([FromRoute]Guid id)
         {
             try
             {
-                return View(await fridgeModelService.GetFridgeModelById(id));
+                return View("Update",await fridgeModelService.TakeFridgeModelById(id));
             }
             catch (HttpRequestException e)
             {
@@ -114,16 +103,13 @@ namespace FridgeProject.Web.Client.Controllers
         }
 
         [HttpPost("Update")]
-        public async Task<ActionResult> UpdateFridgeModel(FridgeModel fridgeModel)
+        public async Task<ActionResult> Update(FridgeModel fridgeModel)
         {try
                 {
             if (ModelState.IsValid)
-            {
-                
+            {         
                     await fridgeModelService.UpdateFridgeModel(fridgeModel);
-                    return RedirectToAction(nameof(GetFridgeModels));
-               
-                
+                    return RedirectToAction(nameof(TakeAll));
             }
             else
                 return View(fridgeModel);

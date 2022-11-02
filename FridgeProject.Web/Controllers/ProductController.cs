@@ -22,80 +22,49 @@ namespace FridgeProject.Web.Controllers
         }
 
         [Authorize(Roles ="Client,Admin")]
-        [HttpGet("getproductbyid/{id}")]
-        public async Task<IActionResult> GetProductById(Guid id)
+        [HttpGet("takebyid/{id}")]
+        public async Task<IActionResult> TakeProductById(Guid id)
         {
-            var result = await productServices.GetProductById(id);
-            if (this.HttpContext.User.Identity.IsAuthenticated == true)
-                if (result != null)
-                    return Ok(result);
-                else
-                    return NotFound();
+            var result = await productServices.TakeProductById(id);
+            if (result != null)
+                return Ok(result);
             else
-                return Unauthorized();
+                return NotFound();
         }
 
         [Authorize(Roles = "Client,Admin")]
-        [HttpGet("getproducts")]
-        public async Task<IActionResult> GetProducts()
+        [HttpGet("takeall")]
+        public async Task<IActionResult> TakeProducts()
         {
-            var result = await productServices.GetProducts();
-            if (this.HttpContext.User.Identity.IsAuthenticated == true)
-                if (result != null)
-                    return Ok(result);
-                else
-                    return NotFound();
+            var result = await productServices.TakeProducts();   
+            if (result != null)
+                return Ok(result);
             else
-                return Unauthorized();
+                return NotFound();
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("deleteproduct")]
+        [HttpDelete("delete")]
         public async Task<IActionResult> DeleteProduct([FromBody] Product product)
         {
-            if (this.HttpContext.User.Identity.IsAuthenticated == true)
-            {
-                if (this.HttpContext.User.IsInRole("Admin"))
-                {
-                    await productServices.DeleteProduct(product);
-                    return Ok();
-                }
-                else return Forbid();
-            }
-            else return Unauthorized();
+            await productServices.DeleteProduct(product);
+            return Ok();
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("addproduct")]
+        [HttpPost("add")]
         public async Task<IActionResult> AddProduct([FromBody] Product product)
         {
-            if (this.HttpContext.User.Identity.IsAuthenticated == true)
-            {
-                if (this.HttpContext.User.IsInRole("Admin"))
-                {
-                    await productServices.AddProduct(product);
-                    return Ok();
-                }
-                else return Forbid();
-            }
-            else return Unauthorized();
+            await productServices.AddProduct(product);
+            return Ok();  
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut("updateproduct")]
+        [HttpPut("update")]
         public async Task<IActionResult> UpdateProduct([FromBody] Product product)
         {
-            if (this.HttpContext.User.Identity.IsAuthenticated == true)
-            {
-                if (this.HttpContext.User.IsInRole("Admin"))
-                {
-                    await productServices.UpdateProduct(product);
-                    return Ok();
-
-                }
-                else return Forbid();
-            }
-            else return Unauthorized();
+            await productServices.UpdateProduct(product);
+            return Ok();
         }
     }
 }

@@ -10,8 +10,8 @@ namespace FridgeProject.Abstract
 {
     public interface IProduct
     {
-        public Task<List<Product>> GetProducts();
-        public Task<Product> GetProductById(Guid id);
+        public Task<List<Product>> TakeProducts();
+        public Task<Product> TakeProductById(Guid id);
         public Task AddProduct(Product product);
         public Task UpdateProduct(Product updatedProduct);
         public Task DeleteProduct(Product product);

@@ -30,12 +30,12 @@ namespace FridgeProject.Tests
         }
 
         [Fact]
-        public async void GetByIdProductTest()
+        public async void TakeByIdProductTest()
         {
-            var options = new DbContextOptionsBuilder<AppDBContext>().UseInMemoryDatabase("GetById").Options;
+            var options = new DbContextOptionsBuilder<AppDBContext>().UseInMemoryDatabase("TakeById").Options;
             using var dbContext = new AppDBContext(options);
             var service = new ProductServices(dbContext);
-            await service.AddProduct(new Abstract.Data.Product()
+            await service.AddProduct(new Product()
             {
                 Title = "Томат",
                 DefaultQuantity = 3
@@ -43,7 +43,7 @@ namespace FridgeProject.Tests
 
             Assert.True(dbContext.Products.Any(x => x.Title == "Томат"));
 
-            var product = await service.GetProductById(dbContext.Products.First().Id);
+            var product = await service.TakeProductById(dbContext.Products.First().Id);
 
             Assert.True(product.Title == "Томат" && product.DefaultQuantity == 3);
         }
@@ -64,7 +64,7 @@ namespace FridgeProject.Tests
 
             var product = await dbContext.Products.FirstOrDefaultAsync(fm => fm.Title == "Кетчуп");
 
-            await service.DeleteProduct(await service.GetProductById(product.Id));
+            await service.DeleteProduct(await service.TakeProductById(product.Id));
 
             Assert.False(dbContext.Products.Any(x => x.Title == "Кетчуп"));
         }
@@ -92,9 +92,9 @@ namespace FridgeProject.Tests
         }
 
         [Fact]
-        public async void GetFridgeModelsTest()
+        public async void TakeFridgeModelsTest()
         {
-            var options = new DbContextOptionsBuilder<AppDBContext>().UseInMemoryDatabase("GetAll").Options;
+            var options = new DbContextOptionsBuilder<AppDBContext>().UseInMemoryDatabase("GetAllProducts").Options;
             using var dbContext = new AppDBContext(options);
             var service = new ProductServices(dbContext);
 
@@ -122,7 +122,7 @@ namespace FridgeProject.Tests
 
             Assert.True(dbContext.Products.Any(x => x.Title == "Тыква"));
 
-            var products = await service.GetProducts();
+            var products = await service.TakeProducts();
 
             Assert.True(
                 products.Count == 3

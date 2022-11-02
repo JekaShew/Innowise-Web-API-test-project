@@ -9,12 +9,12 @@ namespace FridgeProject.Abstract
 {
     public interface IFridge
     {
-        public Task<List<Fridge>> GetFridges();
-        public Task<Fridge> GetFridgeById(Guid id);
+        public Task<List<Fridge>> TakeFridges();
+        public Task<Fridge> TakeFridgeById(Guid id);
         public Task AddFridge(Fridge fridge);
         public Task DeleteFridge(Fridge fridge);
         public Task UpdateFridge(Fridge updatedFridge);
         public Task UpdateFridgeProductsWithoutQuantity();
-        public Task<List<Fridge>> GetUpdatedFridgesWithoutQuantity();
+        public Task<List<Fridge>> TakeUpdatedFridgesWithoutQuantity();
     }
 }

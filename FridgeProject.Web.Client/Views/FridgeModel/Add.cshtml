@@ -1,23 +1,20 @@
 @model FridgeProject.Abstract.Data.FridgeModel
 
 @{
-    ViewBag.Title = $"Update Fridge Model {Model.Title}";
+    ViewBag.Title = "Add Fridge Model";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Update Fridge Model</h2>
+<h2>Add New Fridge Model</h2>
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
+<form method="post" action="/FridgeModel/Add">
     <button class="btn btn-outline-primary btn-sm font-weight-bold text-dark ">
-        @Html.ActionLink("Back to Fridge Models", "GetFridgeModels")
+        <a class="font-weight-bold text-dark" href="/FridgeModel/TakeAll"> Back to FridgeModels </a>
     </button>
+
     <div class="form-horizontal w-50">
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.Id)
-
         <div class="form-group">
             @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -36,9 +33,9 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input class="btn btn-outline-primary btn-sm font-weight-bold text-dark " type="submit" value="Update"  />
+                <input class="btn btn-outline-primary btn-sm font-weight-bold text-dark " type="submit" value="Create" />
             </div>
         </div>
     </div>
-}
+</form>
 

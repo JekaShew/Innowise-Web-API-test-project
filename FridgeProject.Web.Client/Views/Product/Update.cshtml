@@ -7,11 +7,9 @@
 
 <h2>Update Product</h2>
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
+<form method="post" action="/Product/Update">
     <button class="btn btn-outline-primary btn-sm font-weight-bold text-dark ">
-        @Html.ActionLink("Back to List", "All")
+        <a class="font-weight-bold text-dark" href="/Product/TakeAll"> Back to Products </a>
     </button>
     <div class="form-horizontal">
         <hr />
@@ -36,9 +34,9 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input  class="btn btn-outline-primary btn-sm font-weight-bold text-dark " type="submit" value="Update"  />
+                <input class="btn btn-outline-primary btn-sm font-weight-bold text-dark " type="submit" value="Update" />
             </div>
         </div>
     </div>
-}
+</form>
 

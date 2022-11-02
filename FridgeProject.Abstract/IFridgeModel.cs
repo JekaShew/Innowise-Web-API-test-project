@@ -9,8 +9,8 @@ namespace FridgeProject.Abstract
 {
     public interface IFridgeModel
     {
-        public  Task<List<FridgeModel>> GetFridgeModels();
-        public  Task<FridgeModel> GetFridgeModelById(Guid id);
+        public  Task<List<FridgeModel>> TakeFridgeModels();
+        public  Task<FridgeModel> TakeFridgeModelById(Guid id);
         public  Task AddFridgeModel(FridgeModel fridgeModel);
         public  Task UpdateFridgeModel(FridgeModel updatedFridgeModel);
         public  Task DeleteFridgeModel(FridgeModel fridgeModel);

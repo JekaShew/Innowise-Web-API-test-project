@@ -21,33 +21,33 @@ namespace FridgeProject.Web.Client.Services
 
         public async Task AddFridgeModel(FridgeModel fridgeModel)
         {
-            var response = await SendRequest(HttpMethod.Post, "fridgemodels", "addfridgemodel", SerializeInJson(fridgeModel));
+            var response = await SendRequest(HttpMethod.Post, "fridgemodels", "add", SerializeInJson(fridgeModel));
             response.EnsureSuccessStatusCode();  
         }
 
         public async Task DeleteFridgeModel(FridgeModel fridgeModel)
         {
-            var response = await SendRequest(HttpMethod.Delete, "fridgemodels", "deletefridgemodel", SerializeInJson(fridgeModel));
+            var response = await SendRequest(HttpMethod.Delete, "fridgemodels", "delete", SerializeInJson(fridgeModel));
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task<FridgeModel> GetFridgeModelById(Guid id)
+        public async Task<FridgeModel> TakeFridgeModelById(Guid id)
         {
-            var response = await SendRequest(HttpMethod.Get, "fridgemodels", $"getfridgemodelbyid/{id}", null);
+            var response = await SendRequest(HttpMethod.Get, "fridgemodels", $"takebyid/{id}", null);
             response.EnsureSuccessStatusCode();
             return await DeSerializeJson<FridgeModel>(response);
         }
 
-        public async Task<List<FridgeModel>> GetFridgeModels()
+        public async Task<List<FridgeModel>> TakeFridgeModels()
         {
-            var response = await SendRequest(HttpMethod.Get, "fridgemodels", "getfridgemodels", null);
+            var response = await SendRequest(HttpMethod.Get, "fridgemodels", "takeall", null);
             response.EnsureSuccessStatusCode();
             return await DeSerializeJson<List<FridgeModel>>(response);
         }
 
         public async Task UpdateFridgeModel(FridgeModel updatedFridgeModel)
         {
-            var response = await SendRequest(HttpMethod.Put, "fridgemodels", "updatefridgemodel", SerializeInJson(updatedFridgeModel));
+            var response = await SendRequest(HttpMethod.Put, "fridgemodels", "update", SerializeInJson(updatedFridgeModel));
             response.EnsureSuccessStatusCode();
         }
 

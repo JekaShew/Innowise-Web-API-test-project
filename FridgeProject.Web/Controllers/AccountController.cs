@@ -26,8 +26,7 @@ namespace FridgeProject.Web.Controllers
         public async Task<IActionResult> LogIn([FromBody]LogInInfo logIn)
         {
             if (ModelState.IsValid)
-            {
-               
+            { 
                     var user = await accountServices.LogIn(logIn);
                 if (user != null)
                     return Ok(user);
@@ -43,8 +42,7 @@ namespace FridgeProject.Web.Controllers
         [Authorize]
         [HttpPost("logout")]
         public async Task<IActionResult> LogOut()
-        {
-            
+        {  
             await accountServices.LogOut();
             return Ok();
         }

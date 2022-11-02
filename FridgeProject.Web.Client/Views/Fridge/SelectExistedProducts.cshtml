@@ -7,7 +7,7 @@
 
 <h2>Products to Take from @Model.Fridge.Title</h2>
 <button class="btn btn-outline-primary btn-sm font-weight-bold text-dark mr-4">
-    @Html.ActionLink("Back to Fridge", "GetFridgeById", new { Id = Model.Fridge.Id }, new { @class = "font-weight-bold text-dark" })
+    <a class = "font-weight-bold text-dark" href="/Fridge/TakeById/@Model.Fridge.Id"> Back to Fridge </a>
 </button>
 <table class="table mt-3 text-center w-75">
     <thead class="thead-light">
@@ -35,10 +35,9 @@
             </td>
             <td>
                 <button class="btn btn-outline-primary btn-sm font-weight-bold text-dark">
-                    @Html.ActionLink("Select", "SelectedExistedProduct", new { FridgeProductId = item.Id, FridgeId = Model.Fridge.Id }, new { @class = "font-weight-bold text-dark" })
+                    <a class="font-weight-bold text-dark" href="/Fridge/SelectedExistedProduct/@item.Id/@Model.Fridge.Id"> Select </a>
                 </button>
             <td>
         </tr>
     }
-
 </table>

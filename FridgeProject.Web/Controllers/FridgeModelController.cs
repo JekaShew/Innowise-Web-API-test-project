@@ -20,79 +20,49 @@ namespace FridgeProject.Web.Controllers
         }
 
         [Authorize(Roles = "Client,Admin")]
-        [HttpGet("getfridgemodelbyid/{id}")]
-        public async Task<IActionResult> GetFridgeModelById(Guid id)
+        [HttpGet("takebyid/{id}")]
+        public async Task<IActionResult> TakeFridgeModelById(Guid id)
         {
-            var result = await fridgeModelServices.GetFridgeModelById(id);
-            if (this.HttpContext.User.Identity.IsAuthenticated == true)
-                if (result != null)
-                    return Ok(result);
-                else
-                    return NotFound();
+            var result = await fridgeModelServices.TakeFridgeModelById(id);
+            if (result != null)
+                return Ok(result);
             else
-                return Unauthorized();
+                return NotFound();
         }
 
         [Authorize(Roles = "Client,Admin")]
-        [HttpGet("getfridgemodels")]
-        public async Task<IActionResult> GetFridgeModels()
+        [HttpGet("takeall")]
+        public async Task<IActionResult> TakeFridgeModels()
         {
-            var result = await fridgeModelServices.GetFridgeModels();
-            if (this.HttpContext.User.Identity.IsAuthenticated == true)
-                if (result != null)
-                    return Ok(result);
-                else
-                    return NotFound();
+            var result = await fridgeModelServices.TakeFridgeModels();
+            if (result != null)
+                return Ok(result);
             else
-                return Unauthorized();
+                return NotFound();
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("deletefridgemodel")]
+        [HttpDelete("delete")]
         public async Task<IActionResult> DeleteFridgeModel([FromBody] FridgeModel fridgeModel)
         {
-            if (this.HttpContext.User.Identity.IsAuthenticated == true)
-            {
-                if (this.HttpContext.User.IsInRole("Admin"))
-                {
-                    await fridgeModelServices.DeleteFridgeModel(fridgeModel);
-                    return Ok();
-                }
-                else return Forbid();
-            }
-            else return Unauthorized();
+            await fridgeModelServices.DeleteFridgeModel(fridgeModel);
+            return Ok();
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("addfridgemodel")]
+        [HttpPost("add")]
         public async Task<IActionResult> AddFridgeModel([FromBody] FridgeModel fridgeModel)
         {
-            if (this.HttpContext.User.Identity.IsAuthenticated == true)
-            {
-                if (this.HttpContext.User.IsInRole("Admin"))
-                {
-                    await fridgeModelServices.AddFridgeModel(fridgeModel);
-                    return Ok();
-                }
-                else return Forbid();
-            }
-            else return Unauthorized();
+            await fridgeModelServices.AddFridgeModel(fridgeModel);
+            return Ok();   
         }
-
+        
         [Authorize(Roles = "Admin")]
-        [HttpPut("updatefridgemodel")]
+        [HttpPut("update")]
         public async Task<IActionResult> UpdateFridgeMoadel([FromBody] FridgeModel fridgeModel)
         {
-            if (this.HttpContext.User.Identity.IsAuthenticated == true)
-            {
-                if (this.HttpContext.User.IsInRole("Admin"))
-                {
-                    await fridgeModelServices.UpdateFridgeModel(fridgeModel);
-                    return Ok();
-                }
-                else return Forbid();
-            }
-            else return Unauthorized();
+            await fridgeModelServices.UpdateFridgeModel(fridgeModel);
+            return Ok();
         }
     }
 }

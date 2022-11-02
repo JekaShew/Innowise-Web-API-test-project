@@ -40,7 +40,6 @@ namespace FridgeProject.Web.Client.Services
 
         public StringContent SerializeInJson(object model)
         {
-         
             return new StringContent(JsonConvert.SerializeObject
                     (
                         model,
@@ -51,7 +50,6 @@ namespace FridgeProject.Web.Client.Services
 
         public async Task<T> DeSerializeJson<T>(HttpResponseMessage responseMessage)
         {
-            
             return  JsonConvert.DeserializeObject<T>
                 (
                     await responseMessage.Content.ReadAsStringAsync(),

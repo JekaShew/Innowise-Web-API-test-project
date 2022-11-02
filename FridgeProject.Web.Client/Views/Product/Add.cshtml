@@ -7,11 +7,10 @@
 
 <h2>Add New Product</h2>
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
+<form method="post" action="/Product/Add">
     <button class="btn btn-outline-primary btn-sm font-weight-bold text-dark ">
-        @Html.ActionLink("Back to Products", "GetProducts")
+        <a class="font-weight-bold text-dark" href="/Product/TakeAll"> Back to Products </a>
+        @*@Html.ActionLink("Back to Products", "TakeAll", "Product")*@
     </button>
     <div class="form-horizontal w-50">
         <hr />
@@ -38,6 +37,6 @@
             </div>
         </div>
     </div>
-}
+</form>
 
 
