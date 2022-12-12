@@ -1,0 +1,41 @@
+@{
+    ViewBag.Title = "Products";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model FridgeWithProducts
+
+<h2>Products to put into @Model.Fridge.Title</h2>
+<button class="btn btn-outline-primary btn-sm font-weight-bold text-dark mr-4">
+    <a class="font-weight-bold text-dark" href="/Fridge/@Model.Fridge.Id"> Back to Fridge </a>
+</button>
+<table class="table mt-3 text-center w-75">
+    <thead class="thead-light">
+        <tr>
+            <th>
+                Title
+            </th>
+            <th>
+                Default Quantity
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    @foreach (var item in Model.Products)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DefaultQuantity)
+            </td>
+            <td>
+                <button class="btn btn-outline-primary btn-sm font-weight-bold text-dark">
+                    <a class="font-weight-bold text-dark" href="/Fridge/SelectedProduct/@item.Id/@Model.Fridge.Id"> Select </a>
+                </button>
+            <td>
+        </tr>
+    }
+</table>

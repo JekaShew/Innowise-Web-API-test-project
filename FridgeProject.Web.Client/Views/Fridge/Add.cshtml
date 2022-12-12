@@ -1,0 +1,53 @@
+@model FridgeWithFridgeModels
+@{
+    ViewBag.Title = "Add Fridge";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Add New Fridge </h2>
+<button class="btn btn-outline-primary btn-sm font-weight-bold text-dark ">
+    <a class="font-weight-bold text-dark" href="/Fridge/TakeAll"> Back to Fridges </a>
+</button>
+<form method="post" action="/Fridge/Add">
+    <div class="form-horizontal w-75">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger " })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Fridge.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Fridge.Title, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Fridge.Title, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Fridge.OwnerName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Fridge.OwnerName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Fridge.OwnerName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Fridge.FridgeModel, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @{
+                    Output.Write(
+                    Html.DropDownListFor
+                    (
+                        model => model.FridgeModelId,
+                        new SelectList(Model.FridgeModels.Select(m => new SelectListItem(m.Title, m.Id.ToString())), "Value", "Text"),
+                        new { @class = "form-control" }
+                    ));
+                }
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-outline-primary btn-sm font-weight-bold text-dark mt-2" />
+            </div>
+        </div>
+    </div>
+</form>
+
+

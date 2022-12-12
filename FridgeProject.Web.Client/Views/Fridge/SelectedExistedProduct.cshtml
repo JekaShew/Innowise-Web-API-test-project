@@ -1,0 +1,40 @@
+@model FridgeProject.Abstract.Data.FridgeProduct
+@{
+    ViewBag.Title = "Add Product";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Take Selected Product </h2>
+<form method="post" action="/Fridge/SelectedExistedProduct">
+    <table class="table text-center w-50">
+        <thead class="thead-light">
+            <tr>
+                <th>
+                    Title
+                </th>
+                <th>
+                    Quantity
+                </th>
+                <th></th>
+            </tr>
+        </thead>  
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Product.Title)
+            </td>
+            <td>
+                <div class="d-flex flex-column justify-content-center">
+                    @Html.DisplayFor(modelItem => Model.Quantity)
+                    <label width="70" class="text-danger ">@ViewBag.QuantityError</label>
+                    <div class="col-md-5 justify-content-end">
+                        @Html.EditorFor(model => Model.Quantity, new { htmlAttributes = new { @class = "form-control " } })
+                        @Html.ValidationMessageFor(model => Model.Quantity, "", new { @class = "text-danger " })
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+        <input type="hidden" name="FridgeId" value="@Model.Fridge.Id" />
+        <input type="hidden" name="FridgeProductId" value="@Model.Product.Id" />
+    <input class="btn btn-outline-primary btn-sm font-weight-bold text-dark" type="submit" value="Take Product from the Fridge" />
+</form>

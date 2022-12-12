@@ -1,0 +1,72 @@
+@{
+    ViewBag.Title = "All Updated Fridges";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model List<FridgeProject.Abstract.Data.Fridge>
+
+<h2>All Updated Fridges</h2>
+@using (Html.BeginForm("UpdateFridgesQuantity", "Fridge"))
+{
+    <button class="btn btn-outline-primary btn-sm font-weight-bold text-dark mr-4">
+        <a class="font-weight-bold text-dark" href="/Fridge/TakeAll"> Back to Fridges </a>
+    </button>
+     <input class="btn btn-outline-primary btn-sm font-weight-bold text-dark" type="submit" value="Update"/>
+}
+<table class="table mt-3 text-center">
+    <thead class=" thead-light">
+        <tr>
+            <th>
+                Title
+            </th>
+            <th>
+                Owner Name
+            </th>
+            <th>
+                Model Title
+            </th>
+            <th>
+                Products in Fridge
+            </th>
+        </tr>
+    </thead>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OwnerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FridgeModel.Title)
+            </td>
+            <td>
+                <table class="table text-center mt-0">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>
+                                Product
+                            </th>
+                            <th>
+                                Quantity
+                            </th>
+                        </tr>
+                    </thead>
+                    @foreach (var fp in item.FridgeProducts)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => fp.Product.Title)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => fp.Quantity)
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </td>
+        </tr>
+    }
+</table>
+
