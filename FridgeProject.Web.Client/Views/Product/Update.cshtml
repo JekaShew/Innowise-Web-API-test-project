@@ -1,12 +1,10 @@
 @model FridgeProject.Abstract.Data.Product
-
 @{
     ViewBag.Title = $"Update Product {Model.Title}";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Update Product</h2>
-
 <form method="post" action="/Product/Update">
     <button class="btn btn-outline-primary btn-sm font-weight-bold text-dark ">
         <a class="font-weight-bold text-dark" href="/Product/TakeAll"> Back to Products </a>
@@ -15,7 +13,6 @@
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Id)
-
         <div class="form-group">
             @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -23,7 +20,6 @@
                 @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
             </div>
         </div>
-
         <div class="form-group">
             @Html.LabelFor(model => model.DefaultQuantity, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -31,7 +27,6 @@
                 @Html.ValidationMessageFor(model => model.DefaultQuantity, "", new { @class = "text-danger" })
             </div>
         </div>
-
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input class="btn btn-outline-primary btn-sm font-weight-bold text-dark " type="submit" value="Update" />

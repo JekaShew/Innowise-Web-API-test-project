@@ -2,8 +2,6 @@ using FridgeProject.Abstract;
 using FridgeProject.Abstract.Data;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -13,11 +11,11 @@ namespace FridgeProject.Web.Client.Controllers
     [Route("/Product")]
     public class ProductController : BaseController
     {
-        private readonly IProduct productService;
+        private readonly IProductServices _productService;
 
-        public ProductController(IProduct productService)
+        public ProductController(IProductServices productService)
         {
-            this.productService = productService;
+           _productService = productService;
         }
 
         [HttpGet("TakeAll")]
@@ -25,7 +23,7 @@ namespace FridgeProject.Web.Client.Controllers
         {
             try
             {
-                var result = await productService.TakeProducts();
+                var result = await _productService.TakeProducts();
                 return View(result);
             }
             catch (HttpRequestException e)
@@ -34,19 +32,18 @@ namespace FridgeProject.Web.Client.Controllers
             }
         }
 
-        [HttpGet("TakeById/{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult> TakeById([FromRoute]Guid id)
         {
             try
             {
-                var result = await productService.TakeProductById(id);
+                var result = await _productService.TakeProductById(id);
                 return View(result);
             }
             catch (HttpRequestException e)
             {
                 return CatchHttpRequestExeption(e);
             }
-
         }
 
         [HttpGet("Add")]
@@ -63,7 +60,7 @@ namespace FridgeProject.Web.Client.Controllers
                 if (ModelState.IsValid)
                 {
 
-                    await productService.AddProduct(product);
+                    await _productService.AddProduct(product);
                     return RedirectToAction(nameof(TakeAll));
                 }
                 else
@@ -72,18 +69,15 @@ namespace FridgeProject.Web.Client.Controllers
             catch (HttpRequestException e)
             {
                 return CatchHttpRequestExeption(e);
-            }
-            
+            }    
         }
 
-
         [HttpGet("Delete/{id}")]
-        public async Task<ActionResult> Delete([FromRoute]Guid id)
+        public async Task<ActionResult> Delete([FromRoute] Guid id)
         {
             try
-            {
-                var product = await productService.TakeProductById(id);
-                await productService.DeleteProduct(product);
+            { 
+                await _productService.DeleteProduct(id);
                 return RedirectToAction(nameof(TakeAll));
             }
             catch (HttpRequestException e)
@@ -95,8 +89,9 @@ namespace FridgeProject.Web.Client.Controllers
         [HttpGet("Update/{id}")]
         public async Task<ActionResult> Update([FromRoute] Guid id)
         {
-            return View(await productService.TakeProductById(id));
+            return View(await _productService.TakeProductById(id));
         }
+
         [HttpPost("Update")]
         public async Task<ActionResult> Update(Product product)
         {
@@ -104,7 +99,7 @@ namespace FridgeProject.Web.Client.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    await productService.UpdateProduct(product);
+                    await _productService.UpdateProduct(product);
                     return RedirectToAction(nameof(TakeAll));
                 }
                 else

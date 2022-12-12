@@ -3,8 +3,6 @@ using FridgeProject.Abstract.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FridgeProject.Web.Controllers
@@ -12,18 +10,18 @@ namespace FridgeProject.Web.Controllers
     [Route("/api/fridgemodels")]
     public class FridgeModelController : Controller
     {
-        private readonly IFridgeModel fridgeModelServices;
+        private readonly IFridgeModelServices _fridgeModelServices;
 
-        public FridgeModelController(IFridgeModel fridgeServices)
+        public FridgeModelController(IFridgeModelServices fridgeServices)
         {
-            this.fridgeModelServices = fridgeServices;
+            _fridgeModelServices = fridgeServices;
         }
 
         [Authorize(Roles = "Client,Admin")]
-        [HttpGet("takebyid/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> TakeFridgeModelById(Guid id)
         {
-            var result = await fridgeModelServices.TakeFridgeModelById(id);
+            var result = await _fridgeModelServices.TakeFridgeModelById(id);
             if (result != null)
                 return Ok(result);
             else
@@ -31,10 +29,10 @@ namespace FridgeProject.Web.Controllers
         }
 
         [Authorize(Roles = "Client,Admin")]
-        [HttpGet("takeall")]
+        [HttpGet]
         public async Task<IActionResult> TakeFridgeModels()
         {
-            var result = await fridgeModelServices.TakeFridgeModels();
+            var result = await _fridgeModelServices.TakeFridgeModels();
             if (result != null)
                 return Ok(result);
             else
@@ -42,26 +40,26 @@ namespace FridgeProject.Web.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("delete")]
-        public async Task<IActionResult> DeleteFridgeModel([FromBody] FridgeModel fridgeModel)
+        [HttpDelete]
+        public async Task<IActionResult> DeleteFridgeModel([FromBody] Guid id)
         {
-            await fridgeModelServices.DeleteFridgeModel(fridgeModel);
+            await _fridgeModelServices.DeleteFridgeModel(id);
             return Ok();
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("add")]
+        [HttpPost]
         public async Task<IActionResult> AddFridgeModel([FromBody] FridgeModel fridgeModel)
         {
-            await fridgeModelServices.AddFridgeModel(fridgeModel);
+            await _fridgeModelServices.AddFridgeModel(fridgeModel);
             return Ok();   
         }
         
         [Authorize(Roles = "Admin")]
-        [HttpPut("update")]
+        [HttpPut]
         public async Task<IActionResult> UpdateFridgeMoadel([FromBody] FridgeModel fridgeModel)
         {
-            await fridgeModelServices.UpdateFridgeModel(fridgeModel);
+            await _fridgeModelServices.UpdateFridgeModel(fridgeModel);
             return Ok();
         }
     }

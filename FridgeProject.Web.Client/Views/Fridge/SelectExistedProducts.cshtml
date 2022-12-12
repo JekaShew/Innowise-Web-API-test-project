@@ -4,10 +4,9 @@
 }
 @model FridgeWithExistedProducts
 
-
 <h2>Products to Take from @Model.Fridge.Title</h2>
 <button class="btn btn-outline-primary btn-sm font-weight-bold text-dark mr-4">
-    <a class = "font-weight-bold text-dark" href="/Fridge/TakeById/@Model.Fridge.Id"> Back to Fridge </a>
+    <a class = "font-weight-bold text-dark" href="/Fridge/@Model.Fridge.Id"> Back to Fridge </a>
 </button>
 <table class="table mt-3 text-center w-75">
     <thead class="thead-light">
@@ -23,7 +22,6 @@
             </th>
         </tr>
     </thead>
-
     @foreach (var item in Model.ExistedProducts)
     {
         <tr>

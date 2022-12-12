@@ -1,48 +1,50 @@
-using FridgeProject.Abstract;
+using AutoMapper;
 using FridgeProject.Abstract.Data;
 using FridgeProject.Data;
 using FridgeProject.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace FridgeProject.Tests
 {
     public class FridgeModelServicesTests
     {
-        [Fact]
-        public async void AddFridgeModelTest()
+        private (AppDBContext, FridgeModelServices) Init()
         {
-            var options = new DbContextOptionsBuilder<AppDBContext>().UseInMemoryDatabase("Add").Options;
-            using var dbContext = new AppDBContext(options);
-            var service = new FridgeModelServices(dbContext);
+            var config = new MapperConfiguration(cfg => cfg.AddProfile<Services.AutoMapper>());
+            var mapper = config.CreateMapper();
+            var options = new DbContextOptionsBuilder<AppDBContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
+            var dbContext = new AppDBContext(options);
+            var service = new FridgeModelServices(dbContext,mapper);
+            return (dbContext, service);
+        }
 
+        [Fact]
+        public async void AddFridgeModel_ValidModel_DataWasSaved()
+        {
+            var (dbContext, service) = Init();
             await service.AddFridgeModel(new FridgeModel()
             {
                 Title = "LG-770",
                 Year = 2005
             });
 
-            Assert.True(dbContext.FridgeModels.Any(x => x.Title == "LG-770"));
+            Assert.True(await dbContext.FridgeModels.AnyAsync(x => x.Title == "LG-770"));
         }
 
         [Fact]
-        public async void TakeByIdFridgeModelTest()
+        public async void TakeByIdFridgeModel_ValidModel_DataExist()
         {
-            var options = new DbContextOptionsBuilder<AppDBContext>().UseInMemoryDatabase("TakeById").Options;
-            using var dbContext = new AppDBContext(options);
-            var service = new FridgeModelServices(dbContext);
+            var (dbContext, service) = Init();
             await service.AddFridgeModel(new FridgeModel()
             {
                 Title = "LG-170",
                 Year = 2005
             });
 
-            Assert.True(dbContext.FridgeModels.Any(x => x.Title == "LG-170"));
+            Assert.True(await dbContext.FridgeModels.AnyAsync(x => x.Title == "LG-170"));
 
             var fridgeModel = await service.TakeFridgeModelById(dbContext.FridgeModels.First().Id);
 
@@ -50,62 +52,52 @@ namespace FridgeProject.Tests
         }
 
         [Fact]
-        public async void DeleteFridgeModelTest()
+        public async void DeleteFridgeModel_ValidModel_DataWasDeleted()
         {
-            var options = new DbContextOptionsBuilder<AppDBContext>().UseInMemoryDatabase("Delete").Options;
-            using var dbContext = new AppDBContext(options);
-            var service = new FridgeModelServices(dbContext);
+            var (dbContext, service) = Init();
             await service.AddFridgeModel(new FridgeModel()
             {
                 Title = "LG-970",
                 Year = 2005
             });
 
-            Assert.True(dbContext.FridgeModels.Any(x => x.Title == "LG-970"));
+            Assert.True(await dbContext.FridgeModels.AnyAsync (x => x.Title == "LG-970"));
 
             var fridgeModel = await dbContext.FridgeModels.FirstOrDefaultAsync(fm => fm.Title == "LG-970");
+            await service.DeleteFridgeModel(fridgeModel.Id);
 
-            await service.DeleteFridgeModel(await service.TakeFridgeModelById(fridgeModel.Id));
-
-            Assert.False(dbContext.FridgeModels.Any(x => x.Title == "LG-970"));
+            Assert.False(await dbContext.FridgeModels.AnyAsync(x => x.Title == "LG-970"));
         }
 
-
         [Fact]
-        public async void UpdateFridgeModelTest()
+        public async void UpdateFridgeModel_ValidModel_DataWasUpdated()
         {
-            var options = new DbContextOptionsBuilder<AppDBContext>().UseInMemoryDatabase("Update").Options;
-            using var dbContext = new AppDBContext(options);
-            var service = new FridgeModelServices(dbContext);
+            var (dbContext, service) = Init();
             await service.AddFridgeModel(new FridgeModel()
             {
                 Title = "LG-970",
                 Year = 2005
             });
 
-            Assert.True(dbContext.FridgeModels.Any(x => x.Title == "LG-970"));
+            Assert.True(await dbContext.FridgeModels.AnyAsync(x => x.Title == "LG-970"));
 
             var fridgeModel = await dbContext.FridgeModels.FirstOrDefaultAsync(fm => fm.Title == "LG-970");
-
             await service.UpdateFridgeModel(new FridgeModel {Id = dbContext.FridgeModels.First(fm=>fm.Title == "LG-970").Id, Title = "LG-2370", Year = 2010});
 
-            Assert.True(dbContext.FridgeModels.Any(x => x.Title == "LG-2370" && x.Year == 2010) && !dbContext.FridgeModels.Any(x => x.Title == "LG-970" && x.Year == 2005));
+            Assert.True(await dbContext.FridgeModels.AnyAsync(x => x.Title == "LG-2370" && x.Year == 2010) && !dbContext.FridgeModels.Any(x => x.Title == "LG-970" && x.Year == 2005));
         }
 
         [Fact]
-        public async void GetFridgeModelsTest()
+        public async void TakeFridgeModels_ValidModels_DataExist()
         {
-            var options = new DbContextOptionsBuilder<AppDBContext>().UseInMemoryDatabase("TakeAllFridgeModels").Options;
-            using var dbContext = new AppDBContext(options);
-            var service = new FridgeModelServices(dbContext);
-
+            var (dbContext, service) = Init();
             await service.AddFridgeModel(new FridgeModel()
             {
                 Title = "Mi-270",
                 Year = 2005
             });
 
-            Assert.True(dbContext.FridgeModels.Any(x => x.Title == "Mi-270"));
+            Assert.True(await dbContext.FridgeModels.AnyAsync (x => x.Title == "Mi-270"));
 
             await service.AddFridgeModel(new FridgeModel()
             {
@@ -113,7 +105,7 @@ namespace FridgeProject.Tests
                 Year = 2006
             });
 
-            Assert.True(dbContext.FridgeModels.Any(x => x.Title == "LG-220"));
+            Assert.True(await dbContext.FridgeModels.AnyAsync(x => x.Title == "LG-220"));
 
             await service.AddFridgeModel(new FridgeModel()
             {
@@ -121,7 +113,7 @@ namespace FridgeProject.Tests
                 Year = 2005
             });
 
-            Assert.True(dbContext.FridgeModels.Any(x => x.Title == "ZELMA-070"));
+            Assert.True(await dbContext.FridgeModels.AnyAsync(x => x.Title == "ZELMA-070"));
 
             var fridgeModels = await service.TakeFridgeModels();
 

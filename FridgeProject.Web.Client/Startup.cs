@@ -1,16 +1,10 @@
-using FridgeProject.Abstract;
 using FridgeProject.Web.Client.Models;
 using FridgeProject.Web.Client.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace FridgeProject.Web.Client
 {
@@ -32,10 +26,10 @@ namespace FridgeProject.Web.Client
                      options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                  });
             services.Configure<RemoteConfig>(Configuration.GetSection("RemoteConfig"));
-            services.AddTransient<IAccount, AccountServices>();
-            services.AddTransient<IFridgeModel, FridgeModelServices>();
-            services.AddTransient<IProduct, ProductServices>();
-            services.AddTransient<IFridge, FridgeServices>();
+            services.AddAccountServices();
+            services.AddFridgeModelServices();
+            services.AddFridgeServices();
+            services.AddProductServices();
             services.AddHttpContextAccessor();
         }
 
@@ -54,11 +48,8 @@ namespace FridgeProject.Web.Client
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
-
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

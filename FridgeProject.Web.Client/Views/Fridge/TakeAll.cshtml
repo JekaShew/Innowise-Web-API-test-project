@@ -3,12 +3,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @model List<FridgeProject.Abstract.Data.Fridge>
+
 <h2>All Fridges</h2>
 <div>
     <button class="btn btn-outline-primary btn-sm font-weight-bold text-dark mr-4">
         <a class="font-weight-bold text-dark" href="/Fridge/Add"> Add New Fridge </a>
     </button>
-
     <button class="btn btn-outline-primary btn-sm font-weight-bold text-dark">
         <a class="font-weight-bold text-dark" href="/Fridge/UpdateFridgesQuantity"> Update Fridges with Product without Product Quantity </a>
     </button>
@@ -68,31 +68,21 @@
                     }
                 </table>
             </td>
-            <td>
-                
-
+            <td>         
                 <button class="btn btn-outline-primary btn-sm ">
                     <a class="font-weight-bold text-dark" href="/Fridge/Update/@item.Id"> Edit </a>
                 </button>   |
-
                 <button class="btn btn-outline-primary btn-sm">
-                    <a class="font-weight-bold text-dark" href="/Fridge/TakeById/@item.Id"> Details </a>
+                    <a class="font-weight-bold text-dark" href="/Fridge/@item.Id"> Details </a>
                 </button>   |
-
                 <button class="btn btn-outline-danger btn-sm font-weight-bold text-dark" onclick="ConfirmModal('@item.Id')">
                     Delete
                 </button>
-
             <td>
-
-        </tr>
-        
+        </tr>    
     }
-
 </table>
-
 <input type="hidden" id="selectedFridge" />
-
 <div class="modal" tabindex="-1" role="dialog" id="deletingFridge">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -119,15 +109,12 @@
     var Back = function () {
         $('#deletingFridge').modal('hide');
     };
-
     var ConfirmModal = function (id) {
         $('#deletingFridge').modal('show');
         $('#selectedFridge').val(id);       
     };
-
     var Delete = function () {
         let id = $('#selectedFridge').val();
         window.location.href = ('/Fridge/Delete/' + id );  
-    };
-    
+    }; 
 </script>

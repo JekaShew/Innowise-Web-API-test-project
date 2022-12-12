@@ -1,13 +1,7 @@
 using FridgeProject.Abstract;
 using FridgeProject.Abstract.Data;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace FridgeProject.Web.Controllers
@@ -15,11 +9,11 @@ namespace FridgeProject.Web.Controllers
     [Route("/api/account")]
     public class AccountController : Controller
     {
-        private readonly IAccount accountServices;
+        private readonly IAccountServices _accountServices;
 
-        public AccountController(IAccount accountServices)
+        public AccountController(IAccountServices accountServices)
         {
-            this.accountServices = accountServices;
+            _accountServices = accountServices;
         }
 
         [HttpPost("login")]
@@ -27,7 +21,7 @@ namespace FridgeProject.Web.Controllers
         {
             if (ModelState.IsValid)
             { 
-                    var user = await accountServices.LogIn(logIn);
+                    var user = await _accountServices.LogIn(logIn);
                 if (user != null)
                     return Ok(user);
                 else
@@ -37,14 +31,6 @@ namespace FridgeProject.Web.Controllers
             {
                 return BadRequest(new { Error = ModelState.First(x => x.Value.Errors.Count > 0).Value.Errors.First().ErrorMessage });
             }
-        }
-
-        [Authorize]
-        [HttpPost("logout")]
-        public async Task<IActionResult> LogOut()
-        {  
-            await accountServices.LogOut();
-            return Ok();
         }
     }
 }

@@ -1,11 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using FridgeProject.Abstract.Data;
 using System.Net.Http;
-using Newtonsoft.Json;
 using FridgeProject.Abstract;
 
 namespace FridgeProject.Web.Client.Controllers
@@ -13,11 +10,11 @@ namespace FridgeProject.Web.Client.Controllers
     [Route("/FridgeModel")]
     public class FridgeModelController : BaseController
     {
-        private readonly IFridgeModel fridgeModelService;
+        private readonly IFridgeModelServices _fridgeModelService;
 
-        public FridgeModelController(IFridgeModel fridgeModelService)
+        public FridgeModelController(IFridgeModelServices fridgeModelService)
         {
-            this.fridgeModelService = fridgeModelService;
+          _fridgeModelService = fridgeModelService;
         }
 
         [HttpGet("TakeAll")]
@@ -25,7 +22,7 @@ namespace FridgeProject.Web.Client.Controllers
         {
             try
             {
-                var result = await fridgeModelService.TakeFridgeModels();
+                var result = await _fridgeModelService.TakeFridgeModels();
                 return View(result);
             }
             catch (HttpRequestException e)
@@ -34,12 +31,12 @@ namespace FridgeProject.Web.Client.Controllers
             }
         }
 
-        [HttpGet("TakeById/{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult> TakeById([FromRoute]Guid id)
         {
             try
             {
-                var result = await fridgeModelService.TakeFridgeModelById(id);
+                var result = await _fridgeModelService.TakeFridgeModelById(id);
                 return View(result);
             }
             catch (HttpRequestException e)
@@ -61,7 +58,7 @@ namespace FridgeProject.Web.Client.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    await fridgeModelService.AddFridgeModel(fridgeModel);
+                    await _fridgeModelService.AddFridgeModel(fridgeModel);
                     return RedirectToAction(nameof(TakeAll));
                 } 
                 else
@@ -75,12 +72,11 @@ namespace FridgeProject.Web.Client.Controllers
         }
 
         [HttpGet("Delete/{id}")]
-        public async Task<ActionResult> Delete([FromRoute]Guid id)
+        public async Task<ActionResult> Delete([FromRoute] Guid id)
         {
             try
             {
-                var fridgeModel = await fridgeModelService.TakeFridgeModelById(id);
-                await fridgeModelService.DeleteFridgeModel(fridgeModel);
+                await _fridgeModelService.DeleteFridgeModel(id);
                 return RedirectToAction(nameof(TakeAll));
             }
             catch (HttpRequestException e)
@@ -94,7 +90,7 @@ namespace FridgeProject.Web.Client.Controllers
         {
             try
             {
-                return View("Update",await fridgeModelService.TakeFridgeModelById(id));
+                return View("Update",await _fridgeModelService.TakeFridgeModelById(id));
             }
             catch (HttpRequestException e)
             {
@@ -104,20 +100,21 @@ namespace FridgeProject.Web.Client.Controllers
 
         [HttpPost("Update")]
         public async Task<ActionResult> Update(FridgeModel fridgeModel)
-        {try
-                {
-            if (ModelState.IsValid)
-            {         
-                    await fridgeModelService.UpdateFridgeModel(fridgeModel);
-                    return RedirectToAction(nameof(TakeAll));
-            }
-            else
-                return View(fridgeModel);
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {         
+                        await _fridgeModelService.UpdateFridgeModel(fridgeModel);
+                        return RedirectToAction(nameof(TakeAll));
+                }
+                else
+                    return View(fridgeModel);
             }
             catch (HttpRequestException e)
-                {
-                    return CatchHttpRequestExeption(e);
-                }
+            {
+                return CatchHttpRequestExeption(e);
+            }
         }
     }
 }

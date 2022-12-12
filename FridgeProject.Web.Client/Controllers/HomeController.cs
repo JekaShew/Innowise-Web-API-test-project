@@ -1,24 +1,19 @@
 using FridgeProject.Abstract;
-using FridgeProject.Abstract.Data;
 using FridgeProject.Web.Client.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace FridgeProject.Web.Client.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IFridge fridgeService;
-        public HomeController(ILogger<HomeController> logger, IFridge fridgeService )
+        private readonly IFridgeServices _fridgeService;
+        public HomeController(ILogger<HomeController> logger, IFridgeServices fridgeService )
         {
             _logger = logger;
-            this.fridgeService = fridgeService;
+            _fridgeService = fridgeService;
         }
 
         public IActionResult Index()

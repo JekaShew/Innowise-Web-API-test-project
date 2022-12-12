@@ -3,73 +3,64 @@ using FridgeProject.Abstract.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using FridgeProject.Abstract;
+using Microsoft.Extensions.DependencyInjection;
+using AutoMapper;
 
 namespace FridgeProject.Services
 {
-    public class FridgeModelServices : IFridgeModel
+    public class FridgeModelServices : IFridgeModelServices
     {
-        private readonly AppDBContext appDBContext;
+        private readonly AppDBContext _appDBContext;
+        private readonly IMapper _mapper;
 
-        public FridgeModelServices(AppDBContext appDBContext)
+        public FridgeModelServices(AppDBContext appDBContext, IMapper mapper)
         {
-            this.appDBContext = appDBContext;
+            _appDBContext = appDBContext;
+            _mapper = mapper;
         }
+
         public async Task AddFridgeModel(FridgeModel fridgeModel)
         {
-            var newFridgeModel = new Data.Models.FridgeModel
-            {
-                Id = Guid.NewGuid(),
-                Title = fridgeModel.Title,
-                Year = fridgeModel.Year
-            };
-
-            await appDBContext.FridgeModels.AddAsync(newFridgeModel);
-            await appDBContext.SaveChangesAsync();
+            var newFridgeModel = _mapper.Map<Data.Models.FridgeModel>(fridgeModel);
+            await _appDBContext.FridgeModels.AddAsync(newFridgeModel);
+            await _appDBContext.SaveChangesAsync();
         }
-        
-        public async Task DeleteFridgeModel(FridgeModel fridgeModel)
-        {
-            var deletedFridgeModel = await appDBContext.FridgeModels.Where(fm => fm.Id == fridgeModel.Id).FirstOrDefaultAsync();
-            appDBContext.FridgeModels.Remove(deletedFridgeModel);
-            await appDBContext.SaveChangesAsync();   
+
+        public async Task DeleteFridgeModel(Guid id)
+        { 
+            _appDBContext.FridgeModels.Remove(await _appDBContext.FridgeModels.FirstOrDefaultAsync(fm => fm.Id == id));
+            await _appDBContext.SaveChangesAsync();
         }
 
         public async Task<List<FridgeModel>> TakeFridgeModels()
         {
-            var fridgeModels = await appDBContext.FridgeModels.AsNoTracking()
-                .Select(fm => new FridgeModel
-                {
-                    Id = fm.Id,
-                    Title = fm.Title,
-                    Year = fm.Year
-                })
-                .ToListAsync();
+            var fridgeModels = _mapper.Map<List<FridgeModel>>(await _appDBContext.FridgeModels.AsNoTracking().ToListAsync());    
             return fridgeModels;
         }
 
         public async Task<FridgeModel> TakeFridgeModelById(Guid id)
         {
-            var selectedFridgeModel = await appDBContext.FridgeModels.AsNoTracking().Where(fm => fm.Id == id).FirstAsync ();
-            
-            return new FridgeModel 
-            { 
-                Id = selectedFridgeModel.Id, 
-                Title = selectedFridgeModel.Title, 
-                Year = selectedFridgeModel.Year
-            };
+            var selectedFridgeModel = await _appDBContext.FridgeModels.AsNoTracking().FirstAsync(fm => fm.Id == id);
+            return _mapper.Map<FridgeModel>(selectedFridgeModel);
         }
 
         public async Task UpdateFridgeModel(FridgeModel fridgemodel)
         {
-            var updatedFridgeModel = await appDBContext.FridgeModels.Where(fm => fm.Id == fridgemodel.Id).FirstAsync();
+            var updatedFridgeModel = await _appDBContext.FridgeModels.FirstAsync(fm => fm.Id == fridgemodel.Id);
             updatedFridgeModel.Title = fridgemodel.Title;
             updatedFridgeModel.Year = fridgemodel.Year;
+            await _appDBContext.SaveChangesAsync();
+        }
+    }
 
-            await appDBContext.SaveChangesAsync();
+    public static class FridgeModelServicesExtensions
+    {
+        public static IServiceCollection AddFridgeModelServices(this IServiceCollection services)
+        {
+            services.AddTransient<IFridgeModelServices, FridgeModelServices>();
+            return services;
         }
     }
 }

@@ -1,5 +1,3 @@
-using System;
-
 namespace FridgeProject.Web.Client.Models
 {
     public class ErrorViewModel

@@ -3,8 +3,6 @@ using FridgeProject.Abstract.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FridgeProject.Web.Controllers
@@ -13,19 +11,18 @@ namespace FridgeProject.Web.Controllers
     [Route("/api/products")]
     public class ProductController : Controller
     {
-        private readonly IProduct productServices;
+        private readonly IProductServices _productServices;
 
-        public ProductController(IProduct productServices)
+        public ProductController(IProductServices productServices)
         {
-            this.productServices = productServices;
-
+            _productServices = productServices;
         }
 
         [Authorize(Roles ="Client,Admin")]
-        [HttpGet("takebyid/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> TakeProductById(Guid id)
         {
-            var result = await productServices.TakeProductById(id);
+            var result = await _productServices.TakeProductById(id);
             if (result != null)
                 return Ok(result);
             else
@@ -33,10 +30,10 @@ namespace FridgeProject.Web.Controllers
         }
 
         [Authorize(Roles = "Client,Admin")]
-        [HttpGet("takeall")]
+        [HttpGet]
         public async Task<IActionResult> TakeProducts()
         {
-            var result = await productServices.TakeProducts();   
+            var result = await _productServices.TakeProducts();   
             if (result != null)
                 return Ok(result);
             else
@@ -44,26 +41,26 @@ namespace FridgeProject.Web.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("delete")]
-        public async Task<IActionResult> DeleteProduct([FromBody] Product product)
+        [HttpDelete]
+        public async Task<IActionResult> DeleteProduct([FromBody] Guid id)
         {
-            await productServices.DeleteProduct(product);
+            await _productServices.DeleteProduct(id);
             return Ok();
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("add")]
+        [HttpPost]
         public async Task<IActionResult> AddProduct([FromBody] Product product)
         {
-            await productServices.AddProduct(product);
+            await _productServices.AddProduct(product);
             return Ok();  
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut("update")]
+        [HttpPut]
         public async Task<IActionResult> UpdateProduct([FromBody] Product product)
         {
-            await productServices.UpdateProduct(product);
+            await _productServices.UpdateProduct(product);
             return Ok();
         }
     }

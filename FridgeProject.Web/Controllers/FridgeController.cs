@@ -3,8 +3,6 @@ using FridgeProject.Abstract.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FridgeProject.Web.Controllers
@@ -12,18 +10,18 @@ namespace FridgeProject.Web.Controllers
     [Route("/api/fridges")]
     public class FridgeController : Controller
     {
-        private readonly IFridge fridgeServices;
+        private readonly IFridgeServices _fridgeServices;
 
-        public FridgeController(IFridge fridgeServices)
+        public FridgeController(IFridgeServices fridgeServices)
         {
-            this.fridgeServices = fridgeServices;
+            _fridgeServices = fridgeServices;
         }
 
         [Authorize(Roles = "Client,Admin")]
-        [HttpGet("takebyid/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetFridgeModelById(Guid id)
         {
-            var result = await fridgeServices.TakeFridgeById(id);
+            var result = await _fridgeServices.TakeFridgeById(id);
             if (result != null)
                 return Ok(result);
             else
@@ -31,10 +29,10 @@ namespace FridgeProject.Web.Controllers
         }
 
         [Authorize(Roles = "Client,Admin")]
-        [HttpGet("takeall")]
+        [HttpGet]
         public async Task<IActionResult> GetFridges( )
         {
-            var result = await fridgeServices.TakeFridges();          
+            var result = await _fridgeServices.TakeFridges();          
             if (result != null)
                 return Ok(result);
             else
@@ -42,42 +40,42 @@ namespace FridgeProject.Web.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("delete")]
-        public async Task<IActionResult> DeleteFridge([FromBody] Fridge fridge)
+        [HttpDelete]
+        public async Task<IActionResult> DeleteFridge([FromBody] Guid id)
         {
-            await fridgeServices.DeleteFridge(fridge);
-            return Ok();               
+            await _fridgeServices.DeleteFridge(id);
+            return Ok();
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("add")]
+        [HttpPost]
         public async Task<IActionResult> AddFridge([FromBody] Fridge fridge)
         {
-            await fridgeServices.AddFridge(fridge);
+            await _fridgeServices.AddFridge(fridge);
             return Ok();
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut("update")]
+        [HttpPut]
         public async Task<IActionResult> UpdateFridge([FromBody]Fridge fridge)
         {
-            await fridgeServices.UpdateFridge(fridge);
+            await _fridgeServices.UpdateFridge(fridge);
             return Ok();
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut("updatefridgeproductswithoutquantity")]
+        [HttpPut("updat-fridges-without-quantity")]
         public async Task<IActionResult> UpdateFridgeProductsWithoutQuantity()
         {  
-            await fridgeServices.UpdateFridgeProductsWithoutQuantity();
+            await _fridgeServices.UpdateFridgeProductsWithoutQuantity();
             return Ok();  
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut("takeandupdatefridgeswithoutquantity")]
-        public async Task<IActionResult> GetUpdatedFridgeProductsWothoutQuantity()
+        [HttpPut("update-and-take-fridges-without-quantity")]
+        public async Task<IActionResult> TakeUpdatedFridgeProductsWothoutQuantity()
         {
-            var updatedFridgesWithoutQuantity = await fridgeServices.TakeUpdatedFridgesWithoutQuantity();
+            var updatedFridgesWithoutQuantity = await _fridgeServices.TakeUpdatedFridgesWithoutQuantity();
             if (updatedFridgesWithoutQuantity != null)
                 return Ok(updatedFridgesWithoutQuantity);
             else

@@ -1,6 +1,5 @@
 @model FridgeProject.Abstract.Data.LogInInfo
 
-
 <div class="container">
     <div class="row">
         <div class="col-md-3">
@@ -23,7 +22,6 @@
                     @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
                 </div>
-
                 <div>
                     <input type="submit" class="btn-outline-primary mt-2" value="Login" />
                 </div>

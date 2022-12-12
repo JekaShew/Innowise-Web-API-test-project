@@ -122,8 +122,8 @@ FROM Fridges
 INNER JOIN FridgeModels on Fridges.FridgeModelId = FridgeModels.Id
 INNER JOIN FridgeProducts on Fridges.Id = FridgeProducts.FridgeId
 INNER JOIN Products on Products.Id = FridgeProducts.ProductId
-WHERE FridgeModels.Title LIKE 'А%'
-GROUP BY Fridges.Title, Products.Title
+WHERE FridgeModels.Title LIKE 'A%'
+ORDER BY Fridges.Title, Products.Title
 
 
 --TASK 2 Сделать выборку холодильников, в которых есть продукты в количестве, меньше чем количество по умолчанию
@@ -131,11 +131,11 @@ GROUP BY Fridges.Title, Products.Title
 SELECT Fridges.Title,Fridges.OwnerName 
 FROM Fridges
 WHERE EXISTS(
-				SELECT * 
-				FROM FridgeProducts
-				INNER JOIN Products on Products.Id = FridgeProducts.ProductId
-				WHERE FridgeProducts.Quantity < Products.DefaultQuantity and FridgeProducts.FridgeId = Fridges.Id
-			)
+		SELECT * 
+		FROM FridgeProducts
+		INNER JOIN Products on Products.Id = FridgeProducts.ProductId
+		WHERE FridgeProducts.Quantity < Products.DefaultQuantity and FridgeProducts.FridgeId = Fridges.Id
+		)
 
 --TASK 3 В каком году выпустили холодильник с наибольшей вместимостью(сумма всех продуктов больше всего)
 
@@ -149,7 +149,6 @@ WHERE Fridges.Id = (
 		SELECT FridgeProducts.FridgeId AS [ID], SUM(FridgeProducts.Quantity) AS [SUM]
 		FROM FridgeProducts
 		GROUP BY FridgeProducts.FridgeId
-		
 	) AS FridgeIdSum
 	ORDER BY FridgeIdSum.SUM DESC
 )
@@ -230,22 +229,22 @@ GROUP BY Fridges.Title,FridgeModels.Title,FridgeModels.Year
 SELECT Fridges.Title
 FROM Fridges 
 WHERE EXISTS(
-				SELECT * 
-				FROM FridgeProducts
-				INNER JOIN Products on Products.Id = FridgeProducts.ProductId
-				WHERE FridgeProducts.Quantity > Products.DefaultQuantity and FridgeProducts.FridgeId = Fridges.Id
-			)
+		SELECT * 
+		FROM FridgeProducts
+		INNER JOIN Products on Products.Id = FridgeProducts.ProductId
+		WHERE FridgeProducts.Quantity > Products.DefaultQuantity and FridgeProducts.FridgeId = Fridges.Id
+		)
 --TASK 10 Вывести список холодильников и для каждого холодильника количество наименований продуктов, количество которых юоьше чем количесвто по умолчанию
 
 SELECT Fridges.Title, COUNT(FridgeProducts.ProductId)
 FROM Fridges
 INNER JOIN FridgeProducts on Fridges.Id = FridgeProducts.FridgeId
 WHERE FridgeProducts.ProductId in (
-				SELECT FridgeProducts.ProductId 
-				FROM FridgeProducts
-				INNER JOIN Products on Products.Id = FridgeProducts.ProductId
-				WHERE FridgeProducts.Quantity > Products.DefaultQuantity and FridgeProducts.FridgeId = Fridges.Id
-			)
+		SELECT FridgeProducts.ProductId 
+		FROM FridgeProducts
+		INNER JOIN Products on Products.Id = FridgeProducts.ProductId
+		WHERE FridgeProducts.Quantity > Products.DefaultQuantity and FridgeProducts.FridgeId = Fridges.Id
+		)
 GROUP BY Fridges.Title
 
 -- Queries that helps to find the correct answer

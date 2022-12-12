@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FridgeProject.Data.Models
 {
@@ -20,6 +17,7 @@ namespace FridgeProject.Data.Models
         public Guid FridgeModelId { get; set; }
 
         public FridgeModel FridgeModel { get; set; }
+
         public List<FridgeProduct> FridgeProducts { get; set; }
     }
 }

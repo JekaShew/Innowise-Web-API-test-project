@@ -1,15 +1,11 @@
 @model FridgeProject.Abstract.Data.FridgeProduct
-
 @{
     ViewBag.Title = "Add Product";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Put Selected Product </h2>
-
 <form method="post" action="/Fridge/SelectedProduct">
-
-
     <table class="table text-center w-50">
         <thead class="thead-light">
             <tr>
@@ -22,7 +18,6 @@
                 <th></th>
             </tr>
         </thead>
-
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => Model.Product.Title)
@@ -35,7 +30,6 @@
                         @Html.ValidationMessageFor(model => Model.Quantity, "", new { @class = "text-danger" })
                     </div>
                 </div>
-
             </td>
 
         </tr>

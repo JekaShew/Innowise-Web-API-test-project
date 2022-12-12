@@ -1,83 +1,66 @@
+using AutoMapper;
 using FridgeProject.Abstract;
 using FridgeProject.Abstract.Data;
 using FridgeProject.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace FridgeProject.Services
 {
-    public class ProductServices : IProduct
+    public class ProductServices : IProductServices
     {
-        private readonly AppDBContext appDBContext;
-        public ProductServices(AppDBContext appDBContext)
+        private readonly AppDBContext _appDBContext;
+        private readonly IMapper _mapper;
+
+        public ProductServices(AppDBContext appDBContext, IMapper mapper)
         {
-            this.appDBContext = appDBContext;
+            _appDBContext = appDBContext;
+            _mapper = mapper;
         }
 
         public async Task AddProduct(Product product)
         {
-            var newProduct = new FridgeProject.Data.Models.Product
-            {
-                Id = Guid.NewGuid(),
-                Title = product.Title,
-                DefaultQuantity = product.DefaultQuantity
-            };
-
-            await appDBContext.Products.AddAsync(newProduct);
-            await appDBContext.SaveChangesAsync();
+            var newProduct = _mapper.Map<Data.Models.Product>(product);
+            await _appDBContext.Products.AddAsync(newProduct);
+            await _appDBContext.SaveChangesAsync();
         }
 
-        public async Task DeleteProduct(Product product)
+        public async Task DeleteProduct(Guid id)
         {
-            var deletedProduct = await appDBContext.Products.Where(p => p.Id == product.Id).FirstOrDefaultAsync();
-            appDBContext.Products.Remove(deletedProduct);  
-            await appDBContext.SaveChangesAsync();
+            _appDBContext.Products.Remove(await _appDBContext.Products.FirstOrDefaultAsync(p => p.Id == id));
+            await _appDBContext.SaveChangesAsync();
         }
 
         public async Task<Product> TakeProductById(Guid id)
         {
-            var product = await appDBContext.Products.AsNoTracking().Where(p => p.Id == id).FirstOrDefaultAsync();
-            return new Product { Id = product.Id, Title = product.Title, DefaultQuantity = product.DefaultQuantity};
+            var product = await _appDBContext.Products.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
+            return _mapper.Map<Product>(product);
         }
 
         public async Task<List<Product>> TakeProducts()
         {
-            var products = await appDBContext.Products.AsNoTracking().Select(p => new Product 
-                {
-                    Id = p.Id,
-                    Title = p.Title, 
-                    DefaultQuantity = p.DefaultQuantity, 
-                    FridgeProducts = p.FridgeProducts.Select(fp => new FridgeProduct 
-                    { 
-                        Id =fp.Id, 
-                        Fridge = new Fridge
-                        {
-                            Id = fp.Fridge.Id,
-                            OwnerName = fp.Fridge.OwnerName,
-                            Title = fp.Fridge.Title,
-                            FridgeModel = new FridgeModel
-                            {
-                                Id = fp.Fridge.FridgeModel.Id,
-                                Title = fp.Fridge.FridgeModel.Title,
-                                Year = fp.Fridge.FridgeModel.Year
-                            }
-                        }, 
-                        Quantity = fp.Quantity
-                    }).ToList()
-                }).ToListAsync();
+            var products = _mapper.Map<List<Product>>(await _appDBContext.Products.AsNoTracking().ToListAsync());
             return products;
         }
 
         public async Task UpdateProduct(Product product)
         {
-            var updatedProduct = await appDBContext.Products.Where(p => p.Id == product.Id).FirstOrDefaultAsync();
+            var updatedProduct = await _appDBContext.Products.FirstOrDefaultAsync(p => p.Id == product.Id);
             updatedProduct.Title = product.Title;
             updatedProduct.DefaultQuantity = product.DefaultQuantity;      
-            await appDBContext.SaveChangesAsync();
+            await _appDBContext.SaveChangesAsync();
+        }
+    }
+
+    public static class ProductServicesExtensions
+    {
+        public static IServiceCollection AddProductServices(this IServiceCollection services)
+        {
+            services.AddTransient<IProductServices, ProductServices>();
+            return services;
         }
     }
 }

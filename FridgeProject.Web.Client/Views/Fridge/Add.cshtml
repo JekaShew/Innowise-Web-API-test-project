@@ -1,5 +1,4 @@
 @model FridgeWithFridgeModels
-
 @{
     ViewBag.Title = "Add Fridge";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -10,7 +9,6 @@
     <a class="font-weight-bold text-dark" href="/Fridge/TakeAll"> Back to Fridges </a>
 </button>
 <form method="post" action="/Fridge/Add">
-
     <div class="form-horizontal w-75">
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger " })
@@ -42,7 +40,6 @@
                         new { @class = "form-control" }
                     ));
                 }
-
             </div>
         </div>
         <div class="form-group">

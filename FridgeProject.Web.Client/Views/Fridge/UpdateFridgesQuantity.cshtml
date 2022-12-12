@@ -3,17 +3,15 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @model List<FridgeProject.Abstract.Data.Fridge>
-<h2>All Updated Fridges</h2>
 
+<h2>All Updated Fridges</h2>
 @using (Html.BeginForm("UpdateFridgesQuantity", "Fridge"))
 {
-<button class="btn btn-outline-primary btn-sm font-weight-bold text-dark mr-4">
-    <a class="font-weight-bold text-dark" href="/Fridge/TakeAll"> Back to Fridges </a>
-</button>
-
- <input class="btn btn-outline-primary btn-sm font-weight-bold text-dark" type="submit" value="Update"/>
+    <button class="btn btn-outline-primary btn-sm font-weight-bold text-dark mr-4">
+        <a class="font-weight-bold text-dark" href="/Fridge/TakeAll"> Back to Fridges </a>
+    </button>
+     <input class="btn btn-outline-primary btn-sm font-weight-bold text-dark" type="submit" value="Update"/>
 }
-
 <table class="table mt-3 text-center">
     <thead class=" thead-light">
         <tr>
@@ -31,8 +29,6 @@
             </th>
         </tr>
     </thead>
-
-
     @foreach (var item in Model)
     {
         <tr>
@@ -72,6 +68,5 @@
             </td>
         </tr>
     }
-
 </table>
 

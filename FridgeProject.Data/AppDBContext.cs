@@ -1,27 +1,23 @@
 using FridgeProject.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FridgeProject.Data
 {
     public class AppDBContext : DbContext
     {
         public DbSet<Fridge> Fridges{ get; set; }
+
         public DbSet<FridgeModel> FridgeModels { get; set; }
+
         public DbSet<FridgeProduct> FridgeProducts{ get; set; }
+
         public DbSet<Product> Products{ get; set; }
-        public DbSet<User> Users { get; set; }
+                
+        public DbSet<User> Users { get; set; }  
 
         public AppDBContext(DbContextOptions<AppDBContext> options) : base(options) { }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            
-        }
 
         public void Seed()
         {
@@ -30,44 +26,47 @@ namespace FridgeProject.Data
 
             var fridgeModels = new[]
             {
-
                 new FridgeModel
                 {
                     Id = Guid.NewGuid(),
                     Title = "Bosh 2007",
                     Year = 2007
                 },
+
                 new FridgeModel
                 {
                     Id = Guid.NewGuid(),
                     Title = "Bosh 2017Pro",
                     Year = 2018
                 },
+
                 new FridgeModel
                 {
                     Id = Guid.NewGuid(),
-                    Title = "Атлант 2011",
+                    Title = "Atlant 2011",
                     Year = 2012
                 },
+
                 new FridgeModel
                 {
                     Id = Guid.NewGuid(),
                     Title = "LG 2010",
                     Year = 2010
                 },
+
                 new FridgeModel
                 {
                     Id = Guid.NewGuid(),
                     Title = "Samsung 2012",
                     Year = 2012
                 },
+
                 new FridgeModel
                 {
                     Id = Guid.NewGuid(),
                     Title = "Xiaomi 2015",
                     Year = 2014
                 },
-
             };
 
             var fridges = new[]
@@ -75,51 +74,56 @@ namespace FridgeProject.Data
                 new Fridge
                 {
                     Id = Guid.NewGuid(),
-                    Title = "Лучший за свои деньги",
-                    OwnerName = "Аникеев Геннадий Евгеньевич",
+                    Title = "Best for it's money",
+                    OwnerName = "Anikeev Genady Eugenevich",
                     FridgeModelId = fridgeModels[5].Id
                 },
 
                  new Fridge
-                {
+                 {
                     Id = Guid.NewGuid(),
-                    Title = "Ксиаоми холодильник",
-                    OwnerName = "Маркулов Кирилл Павлович",
+                    Title = "Xiaomifridge",
+                    OwnerName = "Markulov Kirill Pavlovich",
                     FridgeModelId = fridgeModels[5].Id
                 },
+
                 new Fridge
                 {
                     Id = Guid.NewGuid(),
-                    Title = "Ломающийся холодиьник",
-                    OwnerName = "Невезучий Павел Игоревич",
+                    Title = "Breacking fridge",
+                    OwnerName = "Nevezuchy Pavel Igorevich",
                     FridgeModelId = fridgeModels[4].Id
                 },
+
                 new Fridge
                 {
                     Id = Guid.NewGuid(),
-                    Title = "Управляющийся со смартфона холодильник",
-                    OwnerName = "Смартин Николай Евгеньевич",
+                    Title = "Smart fridge",
+                    OwnerName = "Smartin Nikolai Igorevich",
                     FridgeModelId = fridgeModels[3].Id
                 },
+
                 new Fridge
                 {
                     Id = Guid.NewGuid(),
-                    Title = "Отечественный холодильник",
-                    OwnerName = "Патриотов Иван Иванович",
+                    Title = "Native fridge",
+                    OwnerName = "Honest Ivan Ivanovich",
                     FridgeModelId = fridgeModels[2].Id
                 },
+
                 new Fridge
                 {
                     Id = Guid.NewGuid(),
-                    Title = "Классный бош с увеличенной морозильной камерой",
-                    OwnerName = "Степанюк Никита Кириллович",
+                    Title = "Such a good and big Bosh",
+                    OwnerName = "Stepanuk Kirill Ivanovich",
                     FridgeModelId = fridgeModels[1].Id
                 },
+
                 new Fridge
                 {
                     Id = Guid.NewGuid(),
-                    Title = "Дорогой холодильник с продуктами",
-                    OwnerName = "Петриков Василий Иванович",
+                    Title = "Expensive fridge with products",
+                    OwnerName = "Petrikov Vasiliy Vladimirovich",
                     FridgeModelId = fridgeModels[0].Id
                     
                 }            
@@ -130,98 +134,98 @@ namespace FridgeProject.Data
                 new Product
                 { 
                     Id = Guid.NewGuid(),
-                    Title = "Огурец",
+                    Title = "Cucumber",
                     DefaultQuantity = 2
                 },
 
                 new Product
                 {
                     Id = Guid.NewGuid(),
-                    Title = "Помидор",
+                    Title = "Tomato",
                     DefaultQuantity = 4
                 },
 
                 new Product
                 {
                     Id = Guid.NewGuid(),
-                    Title = "Молоко",
+                    Title = "Milk",
                     DefaultQuantity = 1
                 },
 
                 new Product
                 {
                     Id = Guid.NewGuid(),
-                    Title = "Сыр",
+                    Title = "Cheese",
                     DefaultQuantity = 1
                 },
 
                 new Product
                 {
                     Id = Guid.NewGuid(),
-                    Title = "Соус",
+                    Title = "Sauce",
                     DefaultQuantity = 2
                 },
 
                 new Product
                 {
                     Id = Guid.NewGuid(),
-                    Title = "Мясо",
+                    Title = "Pork",
                     DefaultQuantity = 2
                 },
 
                 new Product
                 {
                     Id = Guid.NewGuid(),
-                    Title = "Коолбса",
+                    Title = "Sausage",
                     DefaultQuantity = 2
                 },
 
                 new Product
                 {
                     Id = Guid.NewGuid(),
-                    Title = "Пиво",
+                    Title = "Beer",
                     DefaultQuantity = 5
                 },
 
                 new Product
                 {
                     Id = Guid.NewGuid(),
-                    Title = "Виски",
+                    Title = "Whiskey",
                     DefaultQuantity = 2
                 },
 
                 new Product
                 {
                     Id = Guid.NewGuid(),
-                    Title = "Водка",
+                    Title = "Vodka",
                     DefaultQuantity = 1
                 },
 
                 new Product
                 {
                     Id = Guid.NewGuid(),
-                    Title = "Вино",
+                    Title = "Vine",
                     DefaultQuantity = 5
                 },
 
                 new Product
                 {
                     Id = Guid.NewGuid(),
-                    Title = "Энергетик",
+                    Title = "Energy drink",
                     DefaultQuantity = 3
                 },
 
                 new Product
                 {
                     Id = Guid.NewGuid(),
-                    Title = "Вода",
+                    Title = "Water",
                     DefaultQuantity = 2
                 },
 
                 new Product
                 {
                     Id = Guid.NewGuid(),
-                    Title = "Перец",
+                    Title = "Pepper",
                     DefaultQuantity = 3
                 },
             };
@@ -235,6 +239,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[0].Id,
                         Quantity = 4
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -242,6 +247,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[3].Id,
                         Quantity = 2
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -249,6 +255,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[5].Id,
                         Quantity = 14
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -256,6 +263,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[2].Id,
                         Quantity = 1
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -263,6 +271,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[4].Id,
                         Quantity = 7
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -270,6 +279,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[0].Id,
                         Quantity = 6
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -277,6 +287,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[0].Id,
                         Quantity = 5
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -284,6 +295,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[0].Id,
                         Quantity = 8
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -291,6 +303,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[0].Id,
                         Quantity = 1
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -298,6 +311,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[1].Id,
                         Quantity = 8
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -305,6 +319,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[1].Id,
                         Quantity = 8
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -312,6 +327,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[1].Id,
                         Quantity = 9
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -319,6 +335,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[1].Id,
                         Quantity = 19
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -326,6 +343,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[2].Id,
                         Quantity = 10
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -333,6 +351,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[2].Id,
                         Quantity = 5
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -340,6 +359,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[2].Id,
                         Quantity = 4
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -347,6 +367,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[2].Id,
                         Quantity = 12
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -354,6 +375,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[3].Id,
                         Quantity = 8
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -361,6 +383,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[3].Id,
                         Quantity = 48
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -368,6 +391,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[3].Id,
                         Quantity = 1
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -375,6 +399,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[3].Id,
                         Quantity = 3
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -382,6 +407,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[4].Id,
                         Quantity = 7
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -389,6 +415,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[4].Id,
                         Quantity = 7
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -396,6 +423,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[4].Id,
                         Quantity = 7
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -403,6 +431,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[4].Id,
                         Quantity = 2
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -410,6 +439,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[4].Id,
                         Quantity = 5
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -417,6 +447,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[4].Id,
                         Quantity = 10
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -424,6 +455,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[5].Id,
                         Quantity = 16
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -431,6 +463,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[5].Id,
                         Quantity = 7
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -438,6 +471,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[5].Id,
                         Quantity = 10
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -445,6 +479,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[5].Id,
                         Quantity = 5
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -452,6 +487,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[5].Id,
                         Quantity = 4
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -459,6 +495,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[6].Id,
                         Quantity = 2
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -466,6 +503,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[6].Id,
                         Quantity = 3
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -473,6 +511,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[6].Id,
                         Quantity = 11
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -480,6 +519,7 @@ namespace FridgeProject.Data
                         FridgeId = fridges[6].Id,
                         Quantity = 8
                     },
+
                     new FridgeProduct
                     {
                         Id = Guid.NewGuid(),
@@ -488,6 +528,7 @@ namespace FridgeProject.Data
                         Quantity = 4
                     }
                 };
+
             var users = new[]
             {
                 new User
@@ -495,16 +536,18 @@ namespace FridgeProject.Data
                     Id = Guid.NewGuid(),
                     Login = "Client",
                     Password = "Client123",
-                    Role = "Client"
+                    Role = Abstract.Data.Role.Client
                 },
+
                 new User
                 {
                     Id = Guid.NewGuid(),
                     Login = "Admin",
                     Password = "qwerty",
-                    Role = "Admin"
+                    Role = Abstract.Data.Role.Admin
                 }
             };
+
             AddRange(users);
             AddRange(fridgeModels);
             AddRange(fridges);
@@ -513,6 +556,5 @@ namespace FridgeProject.Data
 
             SaveChanges();
         }
-
     }
 }

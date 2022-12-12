@@ -1,31 +1,29 @@
 using FridgeProject.Abstract;
 using FridgeProject.Abstract.Data;
 using FridgeProject.Web.Client.Models;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace FridgeProject.Web.Client.Services
 {
-    public class AccountServices : IAccount, IDisposable
+    public class AccountServices : IAccountServices, IDisposable
     {
-        private readonly HttpClient httpClient;
-        private readonly RemoteConfig remoteConfig;
+        private readonly HttpClient _httpClient;
+        private readonly RemoteConfig _remoteConfig;
         public AccountServices(IOptions<RemoteConfig> options)
         {
-            httpClient = new HttpClient();
-            remoteConfig = options.Value;
+            _httpClient = new HttpClient();
+            _remoteConfig = options.Value;
         }
         public async Task<AuthorizationInfo> LogIn(LogInInfo logIn)
-        {
-           
-                var response = await httpClient.PostAsync
+        {          
+                var response = await _httpClient.PostAsync
                  (
-                     $"{remoteConfig.BaseUrl}/api/account/login",
+                     $"{_remoteConfig.BaseUrl}/api/account/login",
                      new StringContent(JsonConvert.SerializeObject(logIn), System.Text.Encoding.UTF8, "application/json")
                  );
                 response.EnsureSuccessStatusCode();
@@ -34,16 +32,25 @@ namespace FridgeProject.Web.Client.Services
            
         public async Task LogOut()
         {
-            await httpClient.PostAsync
+            await _httpClient.PostAsync
              (
-                $"{remoteConfig.BaseUrl}/api/account/logout",
+                $"{_remoteConfig.BaseUrl}/api/account/logout",
                    new StringContent("")
             ); 
         }
 
         public void Dispose()
         {
-            httpClient.Dispose();
+            _httpClient.Dispose();
+        }
+    }
+
+    public static class AccountServicesExtensions
+    {
+        public static IServiceCollection AddAccountServices(this IServiceCollection services)
+        {
+            services.AddTransient<IAccountServices, AccountServices>();
+            return services;
         }
     }
 }
